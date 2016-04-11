@@ -382,7 +382,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         text = f.read()
         text = unicode(text, "utf8")
         QtGui.QMessageBox.about(self, u'策略说明', text)
-
+        # os.getcwd()
+        # x = u'策略说明.txt'
+        # os.system(x.encode('gbk'))
     def guide(self):
         f = open(u"操作说明.txt","r")
         text = f.read()
