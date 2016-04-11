@@ -1,8 +1,11 @@
 #-*- encoding:utf-8 -*-
-from Tkinter import *
-import tkMessageBox
-import stock_select
 import os
+import tkMessageBox
+from Tkinter import *
+
+import stock_select
+
+
 def execute():
     os.getcwd()
     os.system(u"策略.xlsx".encode('gbk'))
@@ -55,32 +58,32 @@ ld.grid(row = 1, column = 3)
 le = Label(root, text = u'说明')
 le.grid(row = 1, column = 4)
 #公司价值
-Button(root,text=u'策略1:营收季增率', command = stock_select.strategy1).grid(row=2,column=0)
-Button(root,text=u'策略2:EPS季增率', command = stock_select.strategy2).grid(row=3,column=0)
-Button(root,text=u'策略3:毛利率季增率', command = stock_select.strategy3).grid(row=4,column=0)
-Button(root,text=u'策略4:ROE季增率', command = stock_select.strategy4).grid(row=5,column=0)
+Button(root, text=u'策略1:营收季增率', command = stock_select.strategy1).grid(row=2, column=0)
+Button(root, text=u'策略2:EPS季增率', command = stock_select.strategy2).grid(row=3, column=0)
+Button(root, text=u'策略3:毛利率季增率', command = stock_select.strategy3).grid(row=4, column=0)
+Button(root, text=u'策略4:ROE季增率', command = stock_select.strategy4).grid(row=5, column=0)
 #筹码分布
-Button(root,text=u'策略15:融资余额', command = stock_select.strategy15).grid(row=2,column=1)
-Button(root,text=u'策略16:户均持股', command = stock_select.strategy16).grid(row=3,column=1)
-Button(root,text=u'策略17:股东户数', command = stock_select.strategy17).grid(row=4,column=1)
-Button(root,text=u'策略18:十大股东变化数量', command = stock_select.strategy18).grid(row=5,column=1)
-Button(root,text=u'策略19:十大股东持股比例', command = stock_select.strategy19).grid(row=6,column=1)
-Button(root,text=u'策略20:券商、基金、机构持股', command = stock_select.strategy202122).grid(row=7,column=1)
-Button(root,text=u'策略23:换手率', command = stock_select.strategy23).grid(row=8,column=1)
+Button(root, text=u'策略15:融资余额', command = stock_select.strategy15).grid(row=2, column=1)
+Button(root, text=u'策略16:户均持股', command = stock_select.strategy16).grid(row=3, column=1)
+Button(root, text=u'策略17:股东户数', command = stock_select.strategy17).grid(row=4, column=1)
+Button(root, text=u'策略18:十大股东变化数量', command = stock_select.strategy18).grid(row=5, column=1)
+Button(root, text=u'策略19:十大股东持股比例', command = stock_select.strategy19).grid(row=6, column=1)
+Button(root, text=u'策略20:券商、基金、机构持股', command = stock_select.strategy202122).grid(row=7, column=1)
+Button(root, text=u'策略23:换手率', command = stock_select.strategy23).grid(row=8, column=1)
 #市场波动
-Button(root,text=u'策略5:波动率', command = stock_select.strategy5).grid(row=2,column=2)
-Button(root,text=u'策略6:价格', command = stock_select.strategy6).grid(row=3,column=2)
-Button(root,text=u'策略7:日周月10MA', command = stock_select.strategy7).grid(row=4,column=2)
-Button(root,text=u'策略8:日线10MA', command = stock_select.strategy8).grid(row=5,column=2)
-Button(root,text=u'策略9:周线10MA', command = stock_select.strategy9).grid(row=6,column=2)
-Button(root,text=u'策略10:月线10MA', command = stock_select.strategy10).grid(row=7,column=2)
-Button(root,text=u'策略11:波动区间', command = stock_select.strategy11).grid(row=8,column=2)
-Button(root,text=u'策略12:60天波动区间', command = stock_select.strategy12).grid(row=9,column=2)
-Button(root,text=u'策略13:180天波动区间', command = stock_select.strategy13).grid(row=10,column=2)
-Button(root,text=u'策略14:250天波动区间', command = stock_select.strategy14).grid(row=11,column=2)
+Button(root, text=u'策略5:波动率', command = stock_select.strategy5).grid(row=2, column=2)
+Button(root, text=u'策略6:价格', command = stock_select.strategy6).grid(row=3, column=2)
+Button(root, text=u'策略7:日周月10MA', command = stock_select.strategy7).grid(row=4, column=2)
+Button(root, text=u'策略8:日线10MA', command = stock_select.strategy8).grid(row=5, column=2)
+Button(root, text=u'策略9:周线10MA', command = stock_select.strategy9).grid(row=6, column=2)
+Button(root, text=u'策略10:月线10MA', command = stock_select.strategy10).grid(row=7, column=2)
+Button(root, text=u'策略11:波动区间', command = stock_select.strategy11).grid(row=8, column=2)
+Button(root, text=u'策略12:60天波动区间', command = stock_select.strategy12).grid(row=9, column=2)
+Button(root, text=u'策略13:180天波动区间', command = stock_select.strategy13).grid(row=10, column=2)
+Button(root, text=u'策略14:250天波动区间', command = stock_select.strategy14).grid(row=11, column=2)
 
 
-Button(root,text=u'执行所有策略', command = stock_select.write).grid(row=2,column=3)
+Button(root, text=u'执行所有策略', command = stock_select.write).grid(row=2, column=3)
 Button(root,text=u'打开EXCEL', command = execute).grid(row=3,column=3)
 
 Button(root,text=u'策略说明', command = indro).grid(row=2,column=4)
