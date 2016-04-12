@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #coding:utf-8
-import numpy as np
 import matplotlib
+matplotlib.use('Qt4Agg')
+import numpy as np
 from Tkinter import *
 from matplotlib.figure import Figure
 import Tkinter

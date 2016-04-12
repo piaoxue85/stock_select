@@ -111,4 +111,5 @@ def book():
     y = [2,3,4]
     plt.plot(x,y)
     plt.show()
-have_a_try()
+if __name__ == '__main__':
+    have_a_try()
