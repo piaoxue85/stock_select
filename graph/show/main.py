@@ -2,7 +2,6 @@
 
 import sys
 import datetime
-import datetime
 from PyQt4 import QtCore
 from PyQt4.QtGui import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QLabel, QLineEdit, QDateEdit, QPushButton
 import matplotlib
@@ -13,7 +12,7 @@ from matplotlib.ticker import MultipleLocator, FuncFormatter
 from matplotlib.finance import candlestick_ohlc
 from matplotlib.figure import Figure
 import tushare as ts
-
+from pymongo import MongoClient
 
 matplotlib.rcParams['font.sans-serif'] = ['SimHei'] #指定默认字体
 matplotlib.rcParams['axes.unicode_minus'] = False #解决保存图像是负号'-'显示为方块的问题
@@ -59,6 +58,21 @@ def source(code = '601928',start = '2016-02-01',end = '2016-04-01'):
         value.append(raw_data.iloc[i][2]-10)
     return num, data,str_date,value
 
+#数据库mongodb
+def ini():
+    #连接数据库
+    con = MongoClient()
+    db = con.stockdb
+    collection = db.stock_holder
+    return collection
+
+
+def star(col):
+    single = col.find({'日期': '2016-04-15','股票代码':'600190'})
+    multiple = col.find({'日期':'2016-04-15'}).count()
+    this = single.next()
+    print single[u'星数']
+
 
 
 class MyMplCanvas(FigureCanvas):
@@ -103,6 +117,10 @@ class sub_canvas(MyMplCanvas):
         self.horizontalLayout.addWidget(self.button1)
         self.button2 = QPushButton(self.widget)
         self.horizontalLayout.addWidget(self.button2)
+        self.lineEdit.setText(QtCore.QString('600198'))
+        three_month = QtCore.QDate.currentDate().toJulianDay() - 121
+        self.dateEdit.setDate(QtCore.QDate.fromJulianDay(three_month))
+        self.dateEdit_2.setDate(QtCore.QDate.currentDate())
         self.label_1.setText(_translate("MainWindow", "股票代码", None))
         self.label_2.setText(_translate("MainWindow", "起始时间", None))
         self.label_3.setText(_translate("MainWindow", "终止时间", None))
@@ -125,10 +143,10 @@ class sub_canvas(MyMplCanvas):
         self.ax1.xaxis.set_major_formatter(FuncFormatter(self.my_major_formatter))
         # self.ax1.grid()
         for tick in self.ax1.xaxis.get_major_ticks():
-            tick.label1.set_fontsize(8)
-            tick.label1.set_rotation(30)
+            tick.label1.set_fontsize(5)
+            tick.label1.set_rotation(75)
         for tick in self.ax1.yaxis.get_major_ticks():
-            tick.label1.set_fontsize(8)
+            tick.label1.set_fontsize(5)
             tick.label1.set_rotation(30)
         candlestick_ohlc(self.ax1, self.data, width=0.6, colorup='r', colordown='g')
         self.ax1.hold(False)
@@ -144,10 +162,10 @@ class sub_canvas(MyMplCanvas):
         for label in self.ax2.get_xticklabels():
             label.set_picker(True)
         for tick in self.ax2.xaxis.get_major_ticks():
-            tick.label1.set_fontsize(8)
-            tick.label1.set_rotation(30)
+            tick.label1.set_fontsize(5)
+            tick.label1.set_rotation(90)
         for tick in self.ax2.yaxis.get_major_ticks():
-            tick.label1.set_fontsize(8)
+            tick.label1.set_fontsize(5)
             tick.label1.set_rotation(30)
         self.draw()
         # self.fig.clf()
@@ -194,9 +212,8 @@ aw = ApplicationWindow()
 aw.show()
 widget = QWidget()
 app.exec_()
-
-
-
+# col = ini()
+# star(col)
 
 # def drawPic():
 #
