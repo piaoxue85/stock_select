@@ -115,14 +115,14 @@ def star():
     ws.cell(row = 1, column = 1).value = u'所有股票'
     ws.cell(row = 1, column = 2).value = u'获得星数'
     all = []
-    for y in range(3,23):
+    for y in range(3,25):
         for x in range(length):
             all.append(ws.cell(row=x+1+1,column=y).value)
-    for y in range(23,26):
-        for x in range(200):
+    for y in range(25,28):
+        for x in range(300):
             all.append(ws.cell(row=x+1+1,column=y).value)
     for x in range(length):
-        all.append(ws.cell(row=x+1+1,column=26).value)
+        all.append(ws.cell(row=x+1+1,column=28).value)
 
     myset = set(all)
     result = []
@@ -1102,6 +1102,7 @@ def all_strategy():
     strategy202122()
     strategy23()
     strategy24()
+    strategy25()
     star()
     # tkMessageBox.showinfo(title=u'写入成功', message=u'所有策略已经成功，请点击打开进行浏览')
 
