@@ -346,6 +346,7 @@ class Data_Source(object):
         if(self.ALL == False):
             w.start()
         previous = w.tdaysoffset(-20).Data[0][0].isoformat()[0:10]
+        #000001是大盘指数
         wind1 = w.wsd("000001.SH", "close", previous, today, "Fill=Previous;PriceAdj=F")
         wind2 = w.wsd(self.Codes, "close", previous, today, "Fill=Previous;PriceAdj=F")
         self.clear()
@@ -354,6 +355,18 @@ class Data_Source(object):
         self.Data.time = wind2.Times
         self.Data.codes = wind2.Codes
         self.Data.stock_num = len(wind2.Data)
+        return self.Data
+    #25#袁氏选股
+    def wind_data25(self):
+        if (self.ALL == False):
+            w.start()
+        previous = w.tdaysoffset(-252).Data[0][0].isoformat()[0:10]
+        wind = w.wsd(self.Codes, "close", previous, today, "Fill=Previous;PriceAdj=F")
+        self.clear()
+        self.Data.data.append(wind.Data)
+        self.Data.time = wind.Times
+        self.Data.codes = wind.Codes
+        self.Data.stock_num = len(wind.Data)
         return self.Data
 
 

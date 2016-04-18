@@ -55,6 +55,9 @@ class Process(object):
         self.turn_num = []
         #24#涨幅日、周、月都超过大盘
         self.increase = []
+        # 25#袁氏选股
+        self.yuan1 = []
+        self.yuan2 = []
     #执行全部策略
     def exec_all(self):
         D.get_all()
@@ -735,6 +738,7 @@ class Process(object):
     def process19(self):
         Data = D.wind_data19()
         this_time = Data.time
+        all_data = []
         for i in range(Data.stock_num):
             #原数据
             this_data =[]
@@ -779,7 +783,13 @@ class Process(object):
             if(errcode == 0):
                 if(pre_1Q > pre_2Q and pre_2Q > pre_3Q):
                     self.holder_top10.append((code,this_data,this_time))
-        return self.holder_top10
+            pre_1Q = Data.data[i][2]
+            pre_2Q = Data.data[i][1]
+            rate = pre_1Q/pre_2Q
+            if(not math.isnan(rate)):
+                all_data.append((code,pre_2Q,pre_1Q,rate))
+        sort_all = sorted(all_data, key=lambda all_data: all_data[3], reverse=True)
+        return self.holder_top10,sort_all
 
     #20、21、22#券商、基金、机构持股数量排序
     def process202122(self):
@@ -887,5 +897,39 @@ class Process(object):
             if(day >= day_scale and week >= week_scale and month >= month_scale and errcode == 0):
                 self.increase.append((code, this_data, this_time))
         return self.increase
-
+    #25#袁氏选股
+    def process25(self):
+        Data = D.wind_data25()
+        this_time = Data.time
+        for i in range(Data.stock_num):
+            # 原数据
+            this_data1 = []
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            #判错代码
+            errcode = 0
+            day_today = Data.data[0][i][252]
+            day_pre_5 = Data.data[0][i][247]
+            day_pre_60 = Data.data[0][i][192]
+            this_data1.append(day_today)
+            this_data1.append(day_pre_5)
+            this_data1.append(day_pre_60)
+            if(day_today > day_pre_5 and day_pre_5 > day_pre_60 and errcode == 0):
+                self.yuan1.append((code, this_data1, this_time))
+        for i in range(Data.stock_num):
+            # 原数据
+            this_data2 = []
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            #判错代码
+            errcode = 0
+            day_today = Data.data[0][i][252]
+            day_pre_5 = Data.data[0][i][247]
+            day_pre_250 = Data.data[0][i][0]
+            this_data2.append(day_today)
+            this_data2.append(day_pre_5)
+            this_data2.append(day_pre_250)
+            if (day_today > day_pre_5 and day_pre_5 > day_pre_250 and errcode == 0):
+                self.yuan2.append((code, this_data2, this_time))
+        return self.yuan1,self.yuan2
 P = Process()

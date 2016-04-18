@@ -28,7 +28,7 @@ def open_sheet(wb,sheet):
         ws.title = sheet
     return ws
 def format(ws,num,width):
-    list  = ["A","B","C","D","E","F","G","H","I","J"]
+    list  = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N"]
     for i in range(1,num):
         x = ws.column_dimensions[list[i]].width = width
 
@@ -103,7 +103,7 @@ def star_db():
 
 
 
-star_db()
+# star_db()
 def star():
     codes = D.all_code().split(",")
     length = len(codes)
@@ -131,7 +131,7 @@ def star():
     x = sorted(result,key = lambda result: result[1],reverse=True)
     for i in range(1,len(x)):
         ws.cell(row = i+1, column = 1).value = x[i][0]
-        ws.cell(row = i+1, column = 1).font = openpyxl.styles.Font(color='00FFD700')
+        ws.cell(row = i+1, column = 1).font = openpyxl.styles.Font(color='00000000')
         ws.cell(row = i+1, column = 2).value = x[i][1]
     wb.save(today_name)
 #1#营收季增率
@@ -660,11 +660,11 @@ def strategy15():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 16+2).value = u'融资余额'
-    ws.cell(row = 1,column = 16+2).alignment = alignment
+    ws.cell(row = 1,column = 18+2).value = u'融资余额'
+    ws.cell(row = 1,column = 18+2).alignment = alignment
     for i in range(len(mrg)):
-        ws.cell(row = i+1+1,column = 16+2).value = mrg[i][0]
-        ws.cell(row = i+1+1,column = 16+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 18+2).value = mrg[i][0]
+        ws.cell(row = i+1+1,column = 18+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'融资余额')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'前一天融资余额\n'+ mrg[0][2][29].isoformat()[0:10]
@@ -698,11 +698,11 @@ def strategy16():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 17+2).value = u'户均持股'
-    ws.cell(row = 1,column = 17+2).alignment = alignment
+    ws.cell(row = 1,column = 19+2).value = u'户均持股'
+    ws.cell(row = 1,column = 19+2).alignment = alignment
     for i in range(len(holder_avgnum)):
-        ws.cell(row = i+1+1,column = 17+2).value = holder_avgnum[i][0]
-        ws.cell(row = i+1+1,column = 17+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 19+2).value = holder_avgnum[i][0]
+        ws.cell(row = i+1+1,column = 19+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'户均持股')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'上三季户均持股'+'\n'+ holder_avgnum[0][2][0].isoformat()[0:10]
@@ -732,11 +732,11 @@ def strategy17():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 18+2).value = u'股东户数'
-    ws.cell(row = 1,column = 18+2).alignment = alignment
+    ws.cell(row = 1,column = 20+2).value = u'股东户数'
+    ws.cell(row = 1,column = 20+2).alignment = alignment
     for i in range(len(holder_num)):
-        ws.cell(row = i+1+1,column = 18+2).value = holder_num[i][0]
-        ws.cell(row = i+1+1,column = 18+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 20+2).value = holder_num[i][0]
+        ws.cell(row = i+1+1,column = 20+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'股东户数')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'上三季股东户数'+'\n'+ holder_num[0][2][0].isoformat()[0:10]
@@ -766,11 +766,11 @@ def strategy18():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 19+2).value = u'十大股东变化数'
-    ws.cell(row = 1,column = 19+2).alignment = alignment
+    ws.cell(row = 1,column = 21+2).value = u'十大股东变化数'
+    ws.cell(row = 1,column = 21+2).alignment = alignment
     for i in range(len(change)):
-        ws.cell(row = i+1+1,column = 19+2).value = change[i][0]
-        ws.cell(row = i+1+1,column = 19+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 21+2).value = change[i][0]
+        ws.cell(row = i+1+1,column = 21+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'十大股东变化数')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'上季与上两季变化数量'
@@ -793,7 +793,7 @@ def strategy18():
 
 #19#十大股东持股比例增加
 def strategy19():
-    holder_top10 = P.process19()
+    holder_top10, all = P.process19()
     wb = open_workbook(today_name)
 
     if len(holder_top10):
@@ -806,21 +806,31 @@ def strategy19():
         last_one = str(' ')
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 20+2).value = u'十大股东持股比例'
-    ws.cell(row = 1,column = 20+2).alignment = alignment
+    ws.cell(row = 1,column = 22+2).value = u'十大股东持股比例'
+    ws.cell(row = 1,column = 22+2).alignment = alignment
     for i in range(len(holder_top10)):
-        ws.cell(row = i+1+1,column = 20+2).value = holder_top10[i][0]
-        ws.cell(row = i+1+1,column = 20+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 22+2).value = holder_top10[i][0]
+        ws.cell(row = i+1+1,column = 22+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'十大股东持股比例')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'上三季十大股东持股比例'+'\n'+ last_three
     ws.cell(row = 1, column = 3).value = u'上两季十大股东持股比例'+'\n'+ last_two
     ws.cell(row = 1, column = 4).value = u'上一季十大股东持股比例'+'\n'+ last_one
+    ws.cell(row = 1, column = 5).value = u'全部股票'
+    ws.cell(row = 1, column = 6).value = u'上两季十大股东持股比例\n（全部）'+'\n'+ last_one
+    ws.cell(row = 1, column = 7).value = u'上一季十大股东持股比例\n（全部）'+'\n'+ last_one
+    ws.cell(row = 1, column = 8).value = u'排序'+'\n'+ last_one
     ws.cell(row=1,column=1).alignment = alignment
     ws.cell(row=1,column=2).alignment = alignment
     ws.cell(row=1,column=3).alignment = alignment
     ws.cell(row=1,column=4).alignment = alignment
-    format(ws,4,26.0)
+    ws.cell(row=1,column=5).alignment = alignment
+    ws.cell(row=1,column=6).alignment = alignment
+    ws.cell(row=1,column=7).alignment = alignment
+    ws.cell(row=1,column=8).alignment = alignment
+    format(ws,8,26.0)
+    ws.column_dimensions['E'].width = 15
+    ws.column_dimensions['H'].width = 20
     for i in range(0,len(holder_top10)):
         ws.cell(row = i+1+1,column = 1).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
         ws.cell(row = i+1+1, column = 2).number_format = '#,##0.00_)\%;[Green]-#,##0.00\%'
@@ -830,6 +840,16 @@ def strategy19():
         ws.cell(row = i+1+1, column = 2).value = holder_top10[i][1][0]
         ws.cell(row = i+1+1, column = 3).value = holder_top10[i][1][1]
         ws.cell(row = i+1+1, column = 4).value = holder_top10[i][1][2]
+    for i in range(len(all)):
+        ws.cell(row=i + 1 + 1, column=5).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row=i + 1 + 1, column=6).number_format = '#,##0.00_)\%;[Green]-#,##0.00\%'
+        ws.cell(row=i + 1 + 1, column=7).number_format = '#,##0.00_)\%;[Green]-#,##0.00\%'
+        ws.cell(row=i + 1 + 1, column=8).number_format = '#,##0.00_)\%;[Green]-#,##0.00\%'
+        ws.cell(row=i + 1 + 1, column=5).value = all[i][0]
+        ws.cell(row=i + 1 + 1, column=6).value = all[i][1]
+        ws.cell(row=i + 1 + 1, column=7).value = all[i][2]
+        ws.cell(row=i + 1 + 1, column=8).value = all[i][3]
+
     wb.save(today_name)
     # if(ALL == False):
     #     tkMessageBox.showinfo(title=u'写入成功', message=u'策略十九已经成功，请点击打开进行浏览')
@@ -839,21 +859,21 @@ def strategy202122():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 21+2).value = u'券商'
-    ws.cell(row = 1,column = 21+2).alignment = alignment
-    for i in range(len(trader)):
-        ws.cell(row = i+1+1,column = 21+2).value = trader[i][0]
-        ws.cell(row = i+1+1,column = 21+2).font = openpyxl.styles.Font(color='00FF00FF')
-    ws.cell(row = 1,column = 22+2).value = u'基金'
-    ws.cell(row = 1,column = 22+2).alignment = alignment
-    for i in range(len(fund)):
-        ws.cell(row = i+1+1,column = 22+2).value = fund[i][0]
-        ws.cell(row = i+1+1,column = 22+2).font = openpyxl.styles.Font(color='00FF00FF')
-    ws.cell(row = 1,column = 23+2).value = u'机构'
+    ws.cell(row = 1,column = 23+2).value = u'券商'
     ws.cell(row = 1,column = 23+2).alignment = alignment
-    for i in range(len(institude)):
-        ws.cell(row = i+1+1,column = 23+2).value = institude[i][0]
+    for i in range(len(trader)):
+        ws.cell(row = i+1+1,column = 23+2).value = trader[i][0]
         ws.cell(row = i+1+1,column = 23+2).font = openpyxl.styles.Font(color='00FF00FF')
+    ws.cell(row = 1,column = 24+2).value = u'基金'
+    ws.cell(row = 1,column = 24+2).alignment = alignment
+    for i in range(len(fund)):
+        ws.cell(row = i+1+1,column = 24+2).value = fund[i][0]
+        ws.cell(row = i+1+1,column = 24+2).font = openpyxl.styles.Font(color='00FF00FF')
+    ws.cell(row = 1,column = 25+2).value = u'机构'
+    ws.cell(row = 1,column = 25+2).alignment = alignment
+    for i in range(len(institude)):
+        ws.cell(row = i+1+1,column = 25+2).value = institude[i][0]
+        ws.cell(row = i+1+1,column = 25+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'券商、基金、机构')
     ws.cell(row = 1, column = 1).value = u'代码\n（由高到低排序）'
     ws.cell(row = 1, column = 2).value = u'券商持股数'+'\n'+ trader[0][2][0].isoformat()[0:10]
@@ -894,11 +914,11 @@ def strategy23():
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
-    ws.cell(row = 1,column = 24+2).value = u'换手率'
-    ws.cell(row = 1,column = 24+2).alignment = alignment
+    ws.cell(row = 1,column = 26+2).value = u'换手率'
+    ws.cell(row = 1,column = 26+2).alignment = alignment
     for i in range(len(turn_num)):
-        ws.cell(row = i+1+1,column = 24+2).value = turn_num[i][0]
-        ws.cell(row = i+1+1,column = 24+2).font = openpyxl.styles.Font(color='00FF00FF')
+        ws.cell(row = i+1+1,column = 26+2).value = turn_num[i][0]
+        ws.cell(row = i+1+1,column = 26+2).font = openpyxl.styles.Font(color='00FF00FF')
     ws = open_sheet(wb,u'换手率')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
     ws.cell(row = 1, column = 2).value = u'今日换手率\n' + turn_num[0][2][10].isoformat()[0:10]
@@ -983,6 +1003,79 @@ def strategy24():
         ws.cell(row = i+1+1, column = 6).value = increase[i][1][4]
         ws.cell(row = i+1+1, column = 7).value = increase[i][1][4]
     wb.save(today_name)
+#25#袁氏选股
+def strategy25():
+    yuan1,yuan2 = P.process25()
+    if len(yuan1):
+        day_today = yuan1[0][2][252].isoformat()[0:10]
+        day_pre_5 = yuan1[0][2][247].isoformat()[0:10]
+        day_pre_60 = yuan1[0][2][192].isoformat()[0:10]
+    else:
+        day_today = str(' ')
+        day_pre_5 = str(' ')
+        day_pre_60 = str(' ')
+    if len(yuan2):
+        day_today = yuan2[0][2][252].isoformat()[0:10]
+        day_pre_5 = yuan2[0][2][247].isoformat()[0:10]
+        dau_pre_252 = yuan2[0][2][0].isoformat()[0:10]
+    else:
+        day_today = str(' ')
+        day_pre_5 = str(' ')
+        dau_pre_252 = str(' ')
+    wb = open_workbook(today_name)
+    change_sheet(wb, u'股票代码')
+    ws = open_sheet(wb, u'股票代码')
+    ws.cell(row = 1,column = 16+2).value = u'袁氏选股\n(积极版)'
+    ws.cell(row = 1,column = 16+2).alignment = alignment
+    ws.cell(row = 1,column = 17+2).value = u'袁氏选股\n(年版)'
+    ws.cell(row = 1,column = 17+2).alignment = alignment
+    for i in range(len(yuan1)):
+        ws.cell(row=i + 1 + 1, column=16 + 2).value = yuan1[i][0]
+        ws.cell(row=i + 1 + 1, column=16 + 2).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+    for i in range(len(yuan2)):
+        ws.cell(row=i + 1 + 1, column=17 + 2).value = yuan2[i][0]
+        ws.cell(row=i + 1 + 1, column=17 + 2).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+    ws = open_sheet(wb, u'袁氏选股')
+    ws.cell(row=1, column=1).value = u'符合条件代码（积极版）'
+    ws.cell(row = 1, column = 2).value = u'收盘价\n（当日）\n' + day_today
+    ws.cell(row = 1, column = 3).value = u'收盘价\n（前五天）\n' + day_pre_5
+    ws.cell(row = 1, column = 4).value = u'收盘价\n（前六十天）\n' + day_pre_60
+    ws.cell(row=1, column=5).value = u'符合条件代码（年版）'
+    ws.cell(row = 1, column = 6).value = u'收盘价\n（当日）\n' + day_today
+    ws.cell(row = 1, column = 7).value = u'收盘价\n（前五天）\n' + day_pre_5
+    ws.cell(row = 1, column = 8).value = u'收盘价\n（前250天）\n' + dau_pre_252
+    ws.cell(row=1,column=1).alignment = alignment
+    ws.cell(row=1,column=2).alignment = alignment
+    ws.cell(row=1,column=3).alignment = alignment
+    ws.cell(row=1,column=4).alignment = alignment
+    ws.cell(row=1,column=5).alignment = alignment
+    ws.cell(row=1,column=6).alignment = alignment
+    ws.cell(row=1,column=7).alignment = alignment
+    ws.cell(row=1,column=8).alignment = alignment
+    x = ws.column_dimensions['A'].width = 15.0
+    format(ws, 8, 15.0)
+    for i in range(0, len(yuan1)):
+        ws.cell(row=1, column=1).alignment = alignment
+        ws.cell(row = i+1+1,column = 1).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row = i+1+1,column = 2).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1,column = 3).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1,column = 4).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1,column = 1).value = yuan1[i][0]
+        ws.cell(row = i+1+1, column = 2).value = yuan1[i][1][0]
+        ws.cell(row = i+1+1, column = 3).value = yuan1[i][1][1]
+        ws.cell(row = i+1+1, column = 4).value = yuan1[i][1][2]
+    for i in range(0, len(yuan2)):
+        ws.cell(row=1, column=5).alignment = alignment
+        ws.cell(row = i+1+1,column = 5).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row = i+1+1,column = 6).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1,column = 7).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1,column = 8).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
+        ws.cell(row = i+1+1, column = 5).value = yuan2[i][0]
+        ws.cell(row = i+1+1, column = 6).value = yuan2[i][1][0]
+        ws.cell(row = i+1+1, column = 7).value = yuan2[i][1][1]
+        ws.cell(row = i+1+1, column = 8).value = yuan2[i][1][2]
+    wb.save(today_name)
+
 #执行所有策略
 def all_strategy():
     # tkMessageBox.showinfo(title=u'开始执行', message=u'执行所有策略耗时较长，点击确定开始，请耐心等待')

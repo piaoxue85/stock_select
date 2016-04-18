@@ -191,6 +191,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_14.setObjectName(_fromUtf8("action_14"))
         self.action_24 = QtGui.QAction(MainWindow)
         self.action_24.setObjectName(_fromUtf8("action_24"))
+        self.action_25 = QtGui.QAction(MainWindow)
+        self.action_25.setObjectName(_fromUtf8("action_25"))
         self.action_operation = QtGui.QAction(MainWindow)
         self.action_operation.setObjectName(_fromUtf8("action_operation"))
         self.action_strategy = QtGui.QAction(MainWindow)
@@ -221,6 +223,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_4.addAction(self.action_13)
         self.menu_4.addAction(self.action_14)
         self.menu_4.addAction(self.action_24)
+        self.menu_4.addAction(self.action_25)
         self.menu_5.addAction(self.action_operation)
         self.menu_5.addAction(self.action_strategy)
         self.menubar.addAction(self.menu_1.menuAction())
@@ -270,8 +273,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_13.setText(_translate("MainWindow", "180天波动区间", None))
         self.action_14.setText(_translate("MainWindow", "250天波动区间", None))
         self.action_24.setText(_translate("MainWindow", "涨幅超过大盘", None))
-        self.action_operation.setText(_translate("MainWindow", "策略说明", None))
-        self.action_strategy.setText(_translate("MainWindow", "操作说明", None))
+        self.action_25.setText(_translate("MainWindow", "袁氏选股(积极版+年版)", None))
+        self.action_operation.setText(_translate("MainWindow", "操作说明", None))
+        self.action_strategy.setText(_translate("MainWindow", "策略说明", None))
 
         self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
@@ -298,8 +302,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_202122.triggered.connect(self.strategy202122)
         self.action_23.triggered.connect(self.strategy23)
         self.action_24.triggered.connect(self.strategy24)
-        self.action_operation.triggered.connect(self.indro)
-        self.action_strategy.triggered.connect(self.guide)
+        self.action_25.triggered.connect(self.strategy25)
+        self.action_operation.triggered.connect(self.guide)
+        self.slavewindow = slaveWindow()
+        self.action_strategy.triggered.connect(self.slavewindow.show)
         self.action_exit.triggered.connect(self.exit)
 
         #调整窗口打开的位置
@@ -372,6 +378,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def strategy24(self):
         strategy24()
         QtGui.QMessageBox.about( self, u'写入成功', u'涨幅超过大盘策略已经成功，请点击打开进行浏览' )
+    def strategy25(self):
+        strategy25()
+        QtGui.QMessageBox.about(self, u'写入成功', u'袁氏选股策略已经成功，请点击打开进行浏览')
     def strategy_all(self):
         QtGui.QMessageBox.about( self, u'开始执行', u'执行所有策略耗时较长，点击确定开始，请耐心等待' )
         all_strategy()
@@ -385,6 +394,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         # os.getcwd()
         # x = u'策略说明.txt'
         # os.system(x.encode('gbk'))
+
     def guide(self):
         f = open(u"操作说明.txt","r")
         text = f.read()
@@ -397,6 +407,25 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def exit(self):
         sys.exit(app.exec_())
 
+class slaveWindow(QtGui.QWidget):
+    def __init__(self, parent = None):
+        super(slaveWindow, self).__init__(parent)
+        f = open(u"策略说明.txt", "r")
+        text = f.read()
+        text = unicode(text, "utf8")
+        self.widget = QtGui.QWidget(self)
+        self.label = QtGui.QLabel(self.widget)
+        self.label.setText(_translate("MainWindow", text, None))
+        self.horizontalLayout = QtGui.QHBoxLayout(self.widget)
+        self.horizontalLayout.addWidget(self.label)
+        self.setWindowTitle(_translate("MainWindow", "策略说明", None))
+        self.resize(900,600)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("image/icon.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
+        pe = QtGui.QPalette()
+        pe.setColor(QtGui.QPalette.Background, QtGui.QColor(0,0,0))
+        self.label.setPalette(pe)
 app = QtGui.QApplication(sys.argv)
 qt = Ui_MainWindow()
 qt.setupUi(qt)
