@@ -11,7 +11,6 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from data_write import *
 
-today = date.today().isoformat()
 today_name = u'v2.2选股' + today + u'.xlsx'
 
 try:
@@ -137,6 +136,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_4.setObjectName(_fromUtf8("menu_4"))
         self.menu_5 = QtGui.QMenu(self.menubar)
         self.menu_5.setObjectName(_fromUtf8("menu_5"))
+        self.menu_6 = QtGui.QMenu(self.menubar)
+        self.menu_6.setObjectName(_fromUtf8("menu_6"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))

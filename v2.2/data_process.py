@@ -2,8 +2,6 @@
 from data_source import *
 import datetime
 import math
-#今天日期，格式为YYYY-MM-DD
-today = datetime.date.today().isoformat()
 #处理数据类
 class Process(object):
 

@@ -3,8 +3,7 @@ import openpyxl
 import tkMessageBox
 from data_process import *
 from pymongo import MongoClient
-#今天日期，格式为YYYY-MM-DD
-today = date.today().isoformat()
+
 today_name = u'v2.2选股' + today + u'.xlsx'
 #居中的格式
 alignment = openpyxl.styles.Alignment(horizontal='center',vertical='center',wrap_text=True)
@@ -57,53 +56,12 @@ def formula():
         ws.cell(row = i+1, column = 1).font = openpyxl.styles.Font(color='00FFD700')
         ws.cell(row = i+1+1, column = 2).value = '=SUM(COUNTIF(INDIRECT({"C2:U'+ str(length) + '","V2:X201","Y2:Y3000"}),A' + str(i+1+1) +'))'
     wb.save(today_name)
-#数据库mongodb
-def ini():
-    #连接数据库
-    con = MongoClient()
-    db = con.stockdb
-    collection = db.stock_holder
-    return collection
 
 
 
-#代码统计
-
-def star_db():
-    codes = D.all_code().split(",")
-    length = len(codes)
-    wb = open_workbook(today_name)
-    wb = open_workbook(today_name)
-    ws = open_sheet(wb, u'股票代码')
-    all = []
-    for y in range(3, 23):
-        for x in range(length):
-            all.append(ws.cell(row=x + 1 + 1, column=y).value)
-    for y in range(23, 26):
-        for x in range(200):
-            all.append(ws.cell(row=x + 1 + 1, column=y).value)
-    for x in range(length):
-        all.append(ws.cell(row=x + 1 + 1, column=26).value)
-
-    col = ini()
-
-    myset = set(all)
-    result = []
-    for each in myset:
-        if each:
-            code = each[0:6]
-        result.append((each, all.count(each)))
-        data = {
-            u'股票代码':code,
-            u'星数':all.count(each),
-            u'日期':today
-        }
-        col.insert(data)
-    print 123
 
 
 
-# star_db()
 def star():
     codes = D.all_code().split(",")
     length = len(codes)
@@ -470,6 +428,12 @@ def strategy8():
 #9#周线10MA上扬
 def strategy9():
     WEEK10 = P.process9()
+    if len(WEEK10):
+        last_day = WEEK10[0][2][9].isoformat()[0:10]
+        MA10 = WEEK10[0][2][10].isoformat()[0:10]
+    else:
+        last_day = str(' ')
+        MA10= str(' ')
     wb = open_workbook(today_name)
     change_sheet(wb,u'股票代码')
     ws = open_sheet(wb,u'股票代码')
@@ -480,8 +444,8 @@ def strategy9():
         ws.cell(row = i+1+1,column = 9+2).font = openpyxl.styles.Font(color=openpyxl.styles.colors.RED)
     ws = open_sheet(wb,u'周10MA')
     ws.cell(row = 1, column = 1).value = u'符合条件代码'
-    ws.cell(row = 1, column = 2).value = u'前一天10MA周线\n' + WEEK10[0][2][9].isoformat()[0:10]
-    ws.cell(row = 1, column = 3).value = u'10MA周线\n' + WEEK10[0][2][10].isoformat()[0:10]
+    ws.cell(row = 1, column = 2).value = u'前一天10MA周线\n' + last_day
+    ws.cell(row = 1, column = 3).value = u'10MA周线\n' + MA10
     ws.cell(row=1,column=1).alignment = alignment
     ws.cell(row=1,column=2).alignment = alignment
     ws.cell(row=1,column=3).alignment = alignment
