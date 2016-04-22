@@ -58,33 +58,16 @@ def source(code = '601928',start = '2016-02-01',end = '2016-04-01'):
         value.append(raw_data.iloc[i][2]-10)
     return num, data,str_date,value
 
-#数据库mongodb
-def ini():
-    #连接数据库
-    con = MongoClient()
-    db = con.stockdb
-    collection = db.stock_holder
-    return collection
 
-
-def star(col):
-    single = col.find({'日期': '2016-04-15','股票代码':'600190'})
-    multiple = col.find({'日期':'2016-04-15'}).count()
-    this = single.next()
-    print single[u'星数']
 
 
 
 class MyMplCanvas(FigureCanvas):
-    # 定义横坐标格式的回调函数
-    def my_major_formatter(self,x, pos):
-        for i in range(self.num):
-            if (x == i):
-                return self.str_date[i]
     def __init__(self, parent=None, width=9, height=6, dpi=150):
         self.fig = Figure(figsize=(width, height), dpi=dpi,facecolor='#F0F8FF')
-        self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
-        self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
+        self.ax1 = self.fig.add_subplot(111)
+        # self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
+        # self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
         # self.ax1.hold(False)
         # self.ax2.hold(False)
         FigureCanvas.__init__(self, self.fig)
@@ -92,6 +75,34 @@ class MyMplCanvas(FigureCanvas):
         FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
+
+def ini():
+    # 连接数据库
+    con = MongoClient()
+    db = con.stockdb
+    collection = db.stock_holder
+    return collection
+
+import time
+
+def star(col, code, start, end):
+    codintion = {'股票代码': code}
+    multiple = col.find(codintion)
+    date = []
+    value = []
+    d1 = datetime.datetime.strptime(start,"%Y-%m-%d")
+    start_s = time.mktime(d1.timetuple())
+    d2 = datetime.datetime.strptime(end,"%Y-%m-%d")
+    end_s = time.mktime(d2.timetuple())
+    for each in multiple:
+        this = each[u'日期']
+        d3 = datetime.datetime.strptime(this,"%Y-%m-%d")
+        this_s = time.mktime(d3.timetuple())
+        if this_s <= end_s and this_s >= start_s:
+            date.append(each[u'日期'])
+            value.append(each[u'星数'])
+    return date, value
+col = ini()
 
 
 class sub_canvas(MyMplCanvas):
@@ -118,7 +129,7 @@ class sub_canvas(MyMplCanvas):
         self.button2 = QPushButton(self.widget)
         self.horizontalLayout.addWidget(self.button2)
         self.lineEdit.setText(QtCore.QString('600198'))
-        three_month = QtCore.QDate.currentDate().toJulianDay() - 121
+        three_month = QtCore.QDate.currentDate().toJulianDay() - 40
         self.dateEdit.setDate(QtCore.QDate.fromJulianDay(three_month))
         self.dateEdit_2.setDate(QtCore.QDate.currentDate())
         self.label_1.setText(_translate("MainWindow", "股票代码", None))
@@ -129,44 +140,74 @@ class sub_canvas(MyMplCanvas):
 
         self.button1.clicked.connect(self.get_value)
         self.button2.clicked.connect(self.clear)
+
+    # 定义横坐标格式的回调函数
+    def my_major_formatter(self, x, pos):
+        for i in range(self.num):
+            if (x == i):
+                return self.str_date[i]
+                # 定义横坐标格式的回调函数
+
+    def my_star_formatter(self, x, pos):
+        for i in range(len(self.star_date)):
+            if (x == i):
+                return self.star_date[i]
+
     def update_figure(self):
 
         self.fig.clf()
-        self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
-        self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
+        self.ax1 = self.fig.add_subplot(111)
+        self.ax2 = self.ax1.twinx()  # 创建第二个坐标轴
+        # self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
+        # self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
         # 子图一
         self.ax1.set_xticks(range(self.num))
-        xmajorLocator = MultipleLocator(3)  # 将x主刻度标签设置为3的倍数
+        xmajorLocator = MultipleLocator(5)  # 将x主刻度标签设置为3的倍数
         xminorLocator = MultipleLocator(1)  # 将x副刻度标签设置为1的倍数
         self.ax1.xaxis.set_major_locator(xmajorLocator)
         self.ax1.xaxis.set_minor_locator(xminorLocator)
         self.ax1.xaxis.set_major_formatter(FuncFormatter(self.my_major_formatter))
-        # self.ax1.grid()
+        self.ax1.grid()
+        self.ax2.bar(range(len(self.star_date)), self.star_value, picker=True, color='#FFFF00', width = 0.5,edgecolor = 'black')
+
+        self.ax2.set_ylim(0, 80)
+        candlestick_ohlc(self.ax1, self.data, width=0.5, colorup='r', colordown='g')
+        lim = self.ax1.get_ylim()
+        # self.ax1.hold(False)
+        # self.ax2.hold(False)
+        self.ax1.set_ylim(lim[0] * 0.95, lim[1])
         for tick in self.ax1.xaxis.get_major_ticks():
-            tick.label1.set_fontsize(5)
+            tick.label1.set_fontsize(8)
             tick.label1.set_rotation(75)
         for tick in self.ax1.yaxis.get_major_ticks():
-            tick.label1.set_fontsize(5)
+            tick.label1.set_fontsize(8)
             tick.label1.set_rotation(30)
-        candlestick_ohlc(self.ax1, self.data, width=0.6, colorup='r', colordown='g')
-        self.ax1.hold(False)
-        self.ax2.hold(False)
-
+        for tick in self.ax2.xaxis.get_major_ticks():
+            tick.label1.set_fontsize(8)
+            tick.label1.set_rotation(75)
+        for tick in self.ax2.yaxis.get_major_ticks():
+            tick.label1.set_fontsize(8)
+            tick.label1.set_rotation(30)
         # 子图二
 
-        self.ax2.set_xticks(range(self.num))
-        self.ax2.set_xticklabels(self.str_date, rotation=25, horizontalalignment='right')
-        bar = self.ax2.bar(range(self.num), self.value, picker=True, color='#FFFF00')
-        self.ax2.xaxis.set_major_locator(xmajorLocator)
-        self.ax2.xaxis.set_major_formatter(FuncFormatter(self.my_major_formatter))
-        for label in self.ax2.get_xticklabels():
-            label.set_picker(True)
-        for tick in self.ax2.xaxis.get_major_ticks():
-            tick.label1.set_fontsize(5)
-            tick.label1.set_rotation(90)
-        for tick in self.ax2.yaxis.get_major_ticks():
-            tick.label1.set_fontsize(5)
-            tick.label1.set_rotation(30)
+        # self.ax2.set_xticks(range(self.num))
+        # self.ax2.xaxis.set_major_locator(xmajorLocator)
+        # self.ax2.xaxis.set_minor_locator(xminorLocator)
+        # self.ax2.grid()
+        # self.ax2.set_xticklabels(self.str_date, rotation=25, horizontalalignment='right')
+
+        # self.ax2.bar(range(len(self.star_date)), self.star_value, picker=True, color='#FFFF00')
+        # #self.ax2.xaxis.set_major_locator(xmajorLocator)
+        # self.ax2.xaxis.set_major_formatter(FuncFormatter(self.my_major_formatter))
+        # for label in self.ax2.get_xticklabels():
+        #     label.set_picker(True)
+        # for tick in self.ax2.xaxis.get_major_ticks():
+        #     tick.label1.set_fontsize(5)
+        #     tick.label1.set_rotation(90)
+        # for tick in self.ax2.yaxis.get_major_ticks():
+        #     tick.label1.set_fontsize(5)
+        #     tick.label1.set_rotation(30)
+        #
         self.draw()
         # self.fig.clf()
 
@@ -175,15 +216,17 @@ class sub_canvas(MyMplCanvas):
         start = QtCore.QString(self.dateEdit.text())
         end = QtCore.QString(self.dateEdit_2.text())
         code = unicode(code)
-        start = datetime.date(int(start.split("/")[0]),int(start.split("/")[1]),int(start.split("/")[2])).isoformat()
-        end = datetime.date(int(end.split("/")[0]),int(end.split("/")[1]),int(end.split("/")[2])).isoformat()
+        start = datetime.date(int(start.split("/")[0]), int(start.split("/")[1]), int(start.split("/")[2])).isoformat()
+        end = datetime.date(int(end.split("/")[0]), int(end.split("/")[1]), int(end.split("/")[2])).isoformat()
 
         self.num, self.data, self.str_date, self.value = source(code,start,end)
+        self.star_date, self.star_value = star(col, code, start, end)
         self.update_figure()
     def clear(self):
         self.fig.clf()
-        self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
-        self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
+        self.ax1 = self.fig.add_subplot(111)
+        # self.ax1 = self.fig.add_axes([0.1, 0.35, 0.8, 0.58])
+        # self.ax2 = self.fig.add_axes([0.1, 0.07, 0.8, 0.2])
         self.draw()
 class ApplicationWindow(QMainWindow):
     def __init__(self):
@@ -212,8 +255,10 @@ aw = ApplicationWindow()
 aw.show()
 widget = QWidget()
 app.exec_()
-# col = ini()
-# star(col)
+
+# 数据库mongodb
+
+
 
 # def drawPic():
 #

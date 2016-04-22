@@ -1,23 +1,22 @@
-#-*- encoding:utf8 -*-
-import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 
-class mainWindow(QWidget):
-    def __init__(self, parent = None):
-        super(mainWindow, self).__init__(parent)
-        button = QPushButton('弹出新窗口', self)
-        self.slavewindow = slaveWindow()
-        self.connect(button, SIGNAL('clicked()'), self.slavewindow.show)
 
-class slaveWindow(QWidget):
-    def __init__(self, parent = None):
-        super(slaveWindow, self).__init__(parent)
+def randrange(n, vmin, vmax):
+    return (vmax - vmin)*np.random.rand(n) + vmin
 
-def main():
-    app = QApplication(sys.argv)
-    mainwindow = mainWindow()
-    mainwindow.show()
-    app.exec_()
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+n = 100
+for c, m, zl, zh in [('r', 'o', -50, -25), ('b', '^', -30, -5)]:
+    xs = randrange(n, 23, 32)
+    ys = randrange(n, 0, 100)
+    zs = randrange(n, zl, zh)
+    ax.scatter(xs, ys, zs, c=c, marker=m)
 
-main()
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+
+plt.show()
