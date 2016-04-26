@@ -32,18 +32,25 @@ except AttributeError:
         return QApplication.translate(context, text, disambig)
 
 
+# 将数据加工处理
+# 使用tushare作为数据源,code为股票,start和en为起始结束
 
-#将数据加工处理
 
-#使用tushare作为数据源,code为股票,start和en为起始结束
 def source(code = '601928',start = '2016-02-01',end = '2016-04-01'):
+    # start = datetime.datetime.strptime(start, "%Y-%m-%d")
+    # start_s = time.mktime(start.timetuple())
+    # before = start_s - 3600*24*10
+    # start = time.strftime("%Y-%m-%d", time.localtime(before))
+    # data = ts.get_h_data(code,start=start,end = end)
     raw_data = ts.get_h_data(code,start=start,end = end)
+    # raw_data = data.iloc[:-8,:]
     num = len(raw_data)
     title = list(raw_data.columns.values)
     day = list(raw_data.index.values)
     data = []
     line = []
     value = []
+    DrawEMA = []
     date = [datetime.datetime.utcfromtimestamp(each.tolist()/1e9) for each in day]
     str_date = [item.isoformat()[5:10] for item in date]
     num_date = [dates.date2num(each) for each in date]
@@ -55,10 +62,19 @@ def source(code = '601928',start = '2016-02-01',end = '2016-04-01'):
     for i in range(num):
         data.append((num-i-1,raw_data.iloc[i][0],raw_data.iloc[i][1],raw_data.iloc[i][3],raw_data.iloc[i][2]))
         line.append(num-i)
-        value.append(raw_data.iloc[i][2]-10)
+        value.append(raw_data.iloc[i][2])
+
+    for i in range(num):
+        DrawEMA.append(EMA(value,10))
     return num, data,str_date,value
 
+# EMA的计算公式
 
+
+def EMA(x,n):
+    if n is 1:
+        return float(x[-1])
+    return float(2*x[-1]+(n-1)*EMA(x[:-1],n-1))/(n + 1)
 
 
 
