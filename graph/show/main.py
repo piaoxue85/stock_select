@@ -1,5 +1,4 @@
 #-*- encoding:utf8 -*-
-
 import sys
 import datetime
 from PyQt4 import QtCore
