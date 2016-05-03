@@ -64,11 +64,9 @@ def source(code = '601928',start = '2016-02-01',end = '2016-04-01'):
         line.append(num-i)
         value.append(raw_data.iloc[i][2])
 
-    for i in range(num):
-        DrawEMA.append(EMA(value,10))
     return num, data,str_date,value
 
-# EMA的计算公式
+# EMA的计算公式,证明是有问题的，并不能这样子做，EMA都是从开盘日算起的
 
 
 def EMA(x,n):
@@ -76,6 +74,7 @@ def EMA(x,n):
         return float(x[-1])
     return float(2*x[-1]+(n-1)*EMA(x[:-1],n-1))/(n + 1)
 
+#将matplotlib的一个组件放进去
 
 
 class MyMplCanvas(FigureCanvas):
