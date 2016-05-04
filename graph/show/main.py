@@ -1,8 +1,13 @@
-#-*- encoding:utf8 -*-
+# -*- encoding:utf8 -*-
+# 开始重新整理代码
+# 系统包
 import sys
 import datetime
+import time
+# Pyqt4包
 from PyQt4 import QtCore
 from PyQt4.QtGui import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QLabel, QLineEdit, QDateEdit, QPushButton
+# matplotlib包
 import matplotlib
 from matplotlib import dates
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
@@ -10,18 +15,20 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as Navigatio
 from matplotlib.ticker import MultipleLocator, FuncFormatter
 from matplotlib.finance import candlestick_ohlc
 from matplotlib.figure import Figure
+# Tushare 获取股票数据
 import tushare as ts
+# Mongodb 要打开服务才能使用
 from pymongo import MongoClient
 
 matplotlib.rcParams['font.sans-serif'] = ['SimHei'] #指定默认字体
 matplotlib.rcParams['axes.unicode_minus'] = False #解决保存图像是负号'-'显示为方块的问题
 
+# 默认头
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     def _fromUtf8(s):
         return s
-
 try:
     _encoding = QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
@@ -97,7 +104,7 @@ def ini():
     collection = db.stock_holder
     return collection
 
-import time
+
 
 def star(col, code, start, end):
     codintion = {'股票代码': code}
