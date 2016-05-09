@@ -198,25 +198,52 @@ class sub_canvas(MyMplCanvas):
         self.ax1.plot(range(self.num),self.ema,linewidth = 0.5,color = "blue")
 
         #极端情况
-        pre_high = self.kbar[0][2]
-        pre_low = self.kbar[0][3]
-        pre_ema = self.ema[0]
-        pre_deviate = max(abs(pre_high - pre_ema),abs(pre_low - pre_ema))
-        this_high = self.kbar[1][2]
-        this_low = self.kbar[1][3]
-        this_ema = self.ema[1]
-        deviate1 = abs(this_high - this_ema)
-        deviate2 = abs(this_low - this_ema)
-        deviate = max(deviate1, deviate2)
-        for i in range(2,self.num - 1):
-            next_high = self.kbar[i][2]
-            next_low = self.kbar[i][3]
-            next_ema = self.ema[i]
-            next_deviate = max(abs(next_high - next_ema),abs(next_low - next_ema))
-            if deviate > next_deviate and deviate > pre_deviate:
-                self.ax1.annotate('E', xy=(i - 1, next_high), xytext=(i+1, next_high+0.5), arrowprops=dict(arrowstyle="->"))
-            pre_deviate = deviate
-            deviate = next_deviate
+        high_1 = self.kbar[0][2]
+        low_1 = self.kbar[0][3]
+        ema_1 = self.ema[0]
+        deviate_1 = max(abs(high_1 - ema_1),abs(low_1 - ema_1))
+        high_2 = self.kbar[1][2]
+        low_2 = self.kbar[1][3]
+        ema_2 = self.ema[1]
+        deviate_2 = max(abs(high_2 - ema_2),abs(low_2 - ema_2))
+        high_3 = self.kbar[2][2]
+        low_3 = self.kbar[2][3]
+        ema_3 = self.ema[2]
+        deviate_3 = max(abs(high_3 - ema_3),abs(low_3 - ema_3))
+        high_4 = self.kbar[3][2]
+        low_4 = self.kbar[3][3]
+        ema_4 = self.ema[3]
+        deviate_4 = max(abs(high_4 - ema_4),abs(low_4 - ema_4))
+        high_5 = self.kbar[4][2]
+        low_5 = self.kbar[4][3]
+        ema_5 = self.ema[4]
+        deviate_5 = max(abs(high_5 - ema_5),abs(low_5 - ema_5))
+        high_6 = self.kbar[5][2]
+        low_6 = self.kbar[5][3]
+        ema_6 = self.ema[5]
+        deviate_6 = max(abs(high_6 - ema_6),abs(low_6 - ema_6))
+        for i in range(6,self.num):
+            high_7 = self.kbar[i][2]
+            low_7 = self.kbar[i][3]
+            ema_7 = self.ema[i]
+            deviate_7 = max(abs(high_7 - ema_7),abs(low_7 - ema_7))
+            condition1 = deviate_5 > deviate_3 > deviate_2 > deviate_1 or deviate_4 > deviate_3 > deviate_2 > deviate_1
+            condition2 = ema_5 > ema_4 > ema_3 > ema_2 > ema_1 or ema_1 > ema_2 > ema_3 > ema_4 > ema_5
+            condition3 = deviate_5 > deviate_6 > deviate_7
+            if condition1 and condition2 and condition3 :
+                self.ax1.annotate('E', xy=(i, low_7), xytext=(i+ 1, low_7+0.5), arrowprops=dict(arrowstyle="->"))
+            deviate_1 = deviate_2
+            deviate_2 = deviate_3
+            deviate_3 = deviate_4
+            deviate_4 = deviate_5
+            deviate_5 = deviate_6
+            deviate_6 = deviate_7
+            ema_1 = ema_2
+            ema_2 = ema_3
+            ema_3 = ema_4
+            ema_4 = ema_5
+            ema_5 = ema_6
+            ema_6 = ema_7
         # self.ax1.annotate('extreme', xy=(18, 16.8), xytext=(20, 16), arrowprops=dict(arrowstyle="->"))
         self.ax2.set_ylim(0, 80)
         candlestick_ohlc(self.ax1, self.kbar, width=0.5, colorup='r', colordown='g')
