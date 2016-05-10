@@ -10,7 +10,7 @@ import os
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 from data_write import *
-
+import main
 today_name = u'v2.2选股' + today + u'.xlsx'
 
 try:
@@ -198,6 +198,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_operation.setObjectName(_fromUtf8("action_operation"))
         self.action_strategy = QtGui.QAction(MainWindow)
         self.action_strategy.setObjectName(_fromUtf8("action_strategy"))
+        self.action_graph = QtGui.QAction(MainWindow)
+        self.action_graph.setObjectName(_fromUtf8("action_graph"))
         self.menu_1.addAction(self.action_all)
         self.menu_1.addAction(self.action_EXCEL)
         self.menu_1.addSeparator()
@@ -227,11 +229,13 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_4.addAction(self.action_25)
         self.menu_5.addAction(self.action_operation)
         self.menu_5.addAction(self.action_strategy)
+        self.menu_6.addAction(self.action_graph)
         self.menubar.addAction(self.menu_1.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
         self.menubar.addAction(self.menu_4.menuAction())
         self.menubar.addAction(self.menu_5.menuAction())
+        self.menubar.addAction(self.menu_6.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -249,6 +253,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_3.setTitle(_translate("MainWindow", "筹码分布", None))
         self.menu_4.setTitle(_translate("MainWindow", "市场波动", None))
         self.menu_5.setTitle(_translate("MainWindow", "帮助说明", None))
+        self.menu_6.setTitle(_translate("MainWindow", "辅助视图", None))
         self.action_all.setText(_translate("MainWindow", "执行所有策略", None))
         self.action_EXCEL.setText(_translate("MainWindow", "打开EXCEL", None))
         self.action_exit.setText(_translate("MainWindow", "退出", None))
@@ -277,6 +282,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_25.setText(_translate("MainWindow", "袁氏选股(积极版+年版)", None))
         self.action_operation.setText(_translate("MainWindow", "操作说明", None))
         self.action_strategy.setText(_translate("MainWindow", "策略说明", None))
+        self.action_graph.setText(_translate("MainWindow", "辅助视图", None))
 
         self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
@@ -308,6 +314,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.slavewindow = slaveWindow()
         self.action_strategy.triggered.connect(self.slavewindow.show)
         self.action_exit.triggered.connect(self.exit)
+        self.action_graph.triggered.connect(self.graph)
 
         #调整窗口打开的位置
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -407,7 +414,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         os.system(today_name.encode('gbk'))
     def exit(self):
         sys.exit(app.exec_())
-
+    def graph(self):
+        self.graph = main.ApplicationWindow()
+        self.graph.show()
 class slaveWindow(QtGui.QWidget):
     def __init__(self, parent = None):
         super(slaveWindow, self).__init__(parent)

@@ -15,8 +15,8 @@ def ini():
 
 
 def star_db():
-    # today_name = u'v2.2选股2016-05-06.xlsx'
-    # today = u'2016-05-06'
+    # today_name = u'v2.2选股2016-05-09.xlsx'
+    # today = u'2016-05-09'
     codes = D.all_code().split(",")
     length = len(codes)
     wb = open_workbook(today_name)
@@ -45,4 +45,16 @@ def star_db():
             col.insert(data)
     print 123
 
+def test_db():
+    con = MongoClient('172.19.20.38:27017')
+    db = con.stockdb
+    collection = db.stock_holder
+
+    codintion = {u'股票代码': "600198"}
+    data = collection.find(codintion)
+    for each in data:
+        print each
+    print 123
+
+# test_db()
 star_db()
