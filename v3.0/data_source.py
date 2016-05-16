@@ -4,7 +4,7 @@ from WindPy import *
 import math
 #今天日期，格式为YYYY-MM-DD
 # today = date.today().isoformat()
-today = '2016-02-20'
+today = '2016-05-16'
 # 提供原数据的类
 
 
