@@ -11,7 +11,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from data_write import *
 import main
-today_name = u'v2.2选股' + today + u'.xlsx'
+today_name = u'v3.0选股' + today + u'.xlsx'
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -194,6 +194,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_24.setObjectName(_fromUtf8("action_24"))
         self.action_25 = QtGui.QAction(MainWindow)
         self.action_25.setObjectName(_fromUtf8("action_25"))
+        self.action_27 = QtGui.QAction(MainWindow)
+        self.action_27.setObjectName(_fromUtf8("action_27"))
         self.action_operation = QtGui.QAction(MainWindow)
         self.action_operation.setObjectName(_fromUtf8("action_operation"))
         self.action_strategy = QtGui.QAction(MainWindow)
@@ -215,6 +217,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_3.addAction(self.action_19)
         self.menu_3.addAction(self.action_202122)
         self.menu_3.addAction(self.action_23)
+        self.menu_3.addAction(self.action_27)
         self.menu_4.addAction(self.action_5)
         self.menu_4.addAction(self.action_6)
         self.menu_4.addAction(self.action_7)
@@ -245,7 +248,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #     QtGui.QMessageBox.about( self, u'写入成功', u'营收季增率提高策略已经成功，请点击打开进行浏览' )
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "选股V2.2", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.0", None))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":image/title.png\"/></p></body></html>", None))
         self.commandLinkButton.setText(_translate("MainWindow", "打开股票池", None))
         self.menu_1.setTitle(_translate("MainWindow", "文件", None))
@@ -253,7 +256,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_3.setTitle(_translate("MainWindow", "筹码分布", None))
         self.menu_4.setTitle(_translate("MainWindow", "市场波动", None))
         self.menu_5.setTitle(_translate("MainWindow", "帮助说明", None))
-        self.menu_6.setTitle(_translate("MainWindow", "辅助视图", None))
+        self.menu_6.setTitle(_translate("MainWindow", "趋势图", None))
         self.action_all.setText(_translate("MainWindow", "执行所有策略", None))
         self.action_EXCEL.setText(_translate("MainWindow", "打开EXCEL", None))
         self.action_exit.setText(_translate("MainWindow", "退出", None))
@@ -280,9 +283,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_14.setText(_translate("MainWindow", "250天波动区间", None))
         self.action_24.setText(_translate("MainWindow", "涨幅超过大盘", None))
         self.action_25.setText(_translate("MainWindow", "袁氏选股(积极版+年版)", None))
+        self.action_27.setText(_translate("MainWindow", "股本", None))
         self.action_operation.setText(_translate("MainWindow", "操作说明", None))
         self.action_strategy.setText(_translate("MainWindow", "策略说明", None))
-        self.action_graph.setText(_translate("MainWindow", "辅助视图", None))
+        self.action_graph.setText(_translate("MainWindow", "趋势图（股票）", None))
 
         self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
@@ -310,6 +314,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_23.triggered.connect(self.strategy23)
         self.action_24.triggered.connect(self.strategy24)
         self.action_25.triggered.connect(self.strategy25)
+        self.action_27.triggered.connect(self.strategy27)
         self.action_operation.triggered.connect(self.guide)
         self.slavewindow = slaveWindow()
         self.action_strategy.triggered.connect(self.slavewindow.show)
@@ -389,6 +394,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def strategy25(self):
         strategy25()
         QtGui.QMessageBox.about(self, u'写入成功', u'袁氏选股策略已经成功，请点击打开进行浏览')
+    def strategy27(self):
+        strategy27()
+        QtGui.QMessageBox.about(self, u'写入成功', u'股本资料写入已经成功，请点击打开进行浏览')
     def strategy_all(self):
         QtGui.QMessageBox.about( self, u'开始执行', u'执行所有策略耗时较长，点击确定开始，请耐心等待' )
         all_strategy()

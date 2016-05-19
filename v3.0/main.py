@@ -5,8 +5,9 @@ import sys
 import datetime
 import time
 # Pyqt4包
+import PyQt4
 from PyQt4 import QtCore
-from PyQt4.QtGui import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QLabel, QLineEdit, QDateEdit, QPushButton
+from PyQt4.QtGui import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QLabel, QLineEdit, QDateEdit, QPushButton, QKeyEvent
 # matplotlib包
 import matplotlib
 from matplotlib import dates
@@ -26,7 +27,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False #解决保存图像是负号'-
 # EMA的计算公式,证明是有问题的，并不能这样子做，因为从券商的数据来看，EMA都是从开盘日算起的,所以还是使用万得的数据
 
 import WindPy
-WindPy.w.start()
+
 
 # time = x.Times
 print 123
@@ -73,13 +74,14 @@ def source(code = '601928',start = '2016-03-25', end = '2016-05-04'):
     kbar = []
     str_date = []
     WindPy.w.start()
-    data = WindPy.w.wsd(code, "open,high,low,close,EXPMA", start, end,"Fill=Previous;PriceAdj=F;EXPMA_N=10")
+    data = WindPy.w.wsd(code, "open,high,low,close,EXPMA,sec_name", start, end,"Fill=Previous;PriceAdj=F;EXPMA_N=10")
     num  = len(data.Times)
+    name = data.Data[5][0]
     for i in range(num):
         kbar.append((i,data.Data[0][i], data.Data[1][i], data.Data[2][i], data.Data[3][i]))
         ema.append(data.Data[4][i])
         str_date.append(data.Times[i].isoformat()[5:10])
-    return num,kbar,str_date,ema
+    return num,kbar,str_date,ema,name
 
 # 将matplotlib的一个组件放进去
 
@@ -163,6 +165,13 @@ class sub_canvas(MyMplCanvas):
         self.button1.clicked.connect(self.get_value)
         self.button2.clicked.connect(self.clear)
 
+    def keyPressEvent(self, event):
+        keyEvent = QKeyEvent(event)
+        if keyEvent.key() == QtCore.Qt.Key_Enter or keyEvent.key() == QtCore.Qt.Key_Return:
+            self.get_value()
+        if keyEvent.key() == QtCore.Qt.Key_0:
+            self.get_value()
+
     # 定义横坐标格式的回调函数
     def my_major_formatter(self, x, pos):
         for i in range(self.num):
@@ -177,7 +186,7 @@ class sub_canvas(MyMplCanvas):
         start = datetime.date(int(start.split("/")[0]), int(start.split("/")[1]), int(start.split("/")[2])).isoformat()
         end = datetime.date(int(end.split("/")[0]), int(end.split("/")[1]), int(end.split("/")[2])).isoformat()
 
-        self.num, self.kbar, self.str_date, self.ema, = source(code, start, end)
+        self.num, self.kbar, self.str_date, self.ema, self.name= source(code, start, end)
         self.star_date, self.star_value = star(col, code, start, end)
         self.update_figure()
     def update_figure(self):
@@ -186,6 +195,7 @@ class sub_canvas(MyMplCanvas):
         self.ax1 = self.fig.add_subplot(111)
         self.ax2 = self.ax1.twinx()  # 创建第二个坐标轴,为同图
         # 子图一
+        WindPy.w.start()
         self.ax1.set_xticks(range(self.num))
         xmajorLocator = MultipleLocator(5)  # 将x主刻度标签设置为3的倍数
         xminorLocator = MultipleLocator(1)  # 将x副刻度标签设置为1的倍数
@@ -193,10 +203,14 @@ class sub_canvas(MyMplCanvas):
         self.ax1.xaxis.set_minor_locator(xminorLocator)
         self.ax1.xaxis.set_major_formatter(FuncFormatter(self.my_major_formatter))
         self.ax1.grid()
+
         self.ax2.bar(range(len(self.star_date)), self.star_value, picker=True, color='#FFFF00', width = 0.5,edgecolor = 'black')
-
         self.ax1.plot(range(self.num),self.ema,linewidth = 0.5,color = "blue")
-
+        from matplotlib.font_manager import FontProperties
+        font = FontProperties(size=14)  # 设置字体
+        self.ax1.set_title(self.name)
+        self.ax1.set_ylabel(u'价格')
+        self.ax2.set_ylabel(u'星数')
         #极端情况1
         # high_1 = self.kbar[0][2]
         # low_1 = self.kbar[0][3]
@@ -265,6 +279,9 @@ class sub_canvas(MyMplCanvas):
         low_5 = self.kbar[3][3]
         ema_5 = self.ema[3]
         deviate_5 = max(abs(high_5 - ema_5), abs(low_5 - ema_5))
+        lim = self.ax1.get_ylim()
+        # distance = 0.3
+        distance = (lim[1] - lim[0])/9
         for i in range(5,self.num):
             high_6 = self.kbar[i][2]
             low_6 = self.kbar[i][3]
@@ -276,8 +293,13 @@ class sub_canvas(MyMplCanvas):
             top = high_4 - ema_4
             bottom = ema_4 - low_4
             condition4 = (low_4 < low_5 and low_4 < low_6 and top < bottom) or (high_4 > high_5 and high_4 > high_6 and top > bottom)
-            if condition1 and condition2 and condition3 and condition4:
-                self.ax1.annotate('E', xy=(i, low_6), xytext=(i+0.3, low_6+0.3), arrowprops=dict(arrowstyle="->"))
+            condition5 = top < bottom
+            condition6 = top > bottom
+            matplotlib.rcParams.update({'font.size': 9})
+            if condition1 and condition2 and condition3 and condition4 and condition5:
+                self.ax1.annotate(u'多', xy=(i, low_6), xytext=(i-0.5, low_6 - distance), arrowprops=dict(arrowstyle="-"))
+            if condition1 and condition2 and condition3 and condition4 and condition6:
+                self.ax1.annotate(u'空', xy=(i, high_6), xytext=(i-0.5, high_6 + distance), arrowprops=dict(arrowstyle="-"))
             deviate_1 = deviate_2
             deviate_2 = deviate_3
             deviate_3 = deviate_4
@@ -295,9 +317,9 @@ class sub_canvas(MyMplCanvas):
         # self.ax1.annotate('extreme', xy=(18, 16.8), xytext=(20, 16), arrowprops=dict(arrowstyle="->"))
         self.ax2.set_ylim(0, 80)
         candlestick_ohlc(self.ax1, self.kbar, width=0.5, colorup='r', colordown='g')
-        lim = self.ax1.get_ylim()
         # self.ax1.hold(False)
         # self.ax2.hold(False)
+        lim = self.ax1.get_ylim()
         self.ax1.set_ylim(lim[0] * 0.95, lim[1])
         for tick in self.ax1.xaxis.get_major_ticks():
             tick.label1.set_fontsize(8)
@@ -351,9 +373,6 @@ class ApplicationWindow(QMainWindow):
         self.vbl = QVBoxLayout(self.main_widget)
         self.qmc = sub_canvas(self.main_widget, width=9, height=6, dpi=200)
         self.ntb = NavigationToolbar(self.qmc,self.main_widget)
-
-
-
         self.vbl.addWidget(self.qmc)
         # self.vbl.addWidget(self.widget)
         self.vbl.addWidget(self.ntb)
@@ -361,6 +380,12 @@ class ApplicationWindow(QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
+    def keyPressEvent(self, event):
+        keyEvent = QKeyEvent(event)
+        if keyEvent.key() == QtCore.Qt.Key_Enter or keyEvent.key() == QtCore.Qt.Key_Return:
+            self.qmc.get_value()
+        if keyEvent.key() == QtCore.Qt.Key_0:
+            self.get_value()
 class SlaveWindow(QWidget):
     def __init__(self):
         QWidget.__init__(self)

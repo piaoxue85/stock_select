@@ -939,4 +939,42 @@ class Process(object):
             day_pre_250 = Data.data[0][i][0]
             all.append((code,day_today,day_pre_5,day_pre_60,day_pre_250))
         return self.yuan1,self.yuan2,all
+
+    # 27 # 股本，总股本和流通股本
+    def process27(self):
+        Data = D.wind_data27()
+        data1 = Data.data[0]
+        data2 = Data.data[1]
+        this_time = Data.time
+        for i in range(Data.stock_num):
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            # 判错代码
+            errcode = 0
+            Q = data1[i][0]
+            if (Q == None):
+                print code + u"没有上季数据"
+                errcode = 1
+            elif (math.isnan(Q)):
+                print code + u"没有上季数据"
+                errcode = 1
+            if (errcode == 0):
+                self.trader.append((code, Q, this_time))
+        for i in range(Data.stock_num):
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            # 判错代码
+            errcode = 0
+            Q = data2[i][0]
+            if (Q == None):
+                print code + u"没有上季数据"
+                errcode = 1
+            elif (math.isnan(Q)):
+                print code + u"没有上季数据"
+                errcode = 1
+            if (errcode == 0):
+                self.fund.append((code, Q, this_time))
+        x = sorted(self.trader, key=lambda trader: trader[1], reverse=True)
+        y = sorted(self.fund, key=lambda fund: fund[1], reverse=True)
+        return x,y
 P = Process()

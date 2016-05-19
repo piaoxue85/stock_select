@@ -3,8 +3,8 @@
 from WindPy import *
 import math
 #今天日期，格式为YYYY-MM-DD
-# today = date.today().isoformat()
-today = '2016-05-16'
+today = date.today().isoformat()
+# today = '2016-02-01'
 # 提供原数据的类
 
 
@@ -362,9 +362,10 @@ class Data_Source(object):
         self.Data.codes = wind2.Codes
         self.Data.stock_num = len(wind2.Data)
         return self.Data
-    #25#袁氏选股
+    # 2526 #袁氏选股
+
     def wind_data25(self):
-        if (self.ALL == False):
+        if self.ALL == False:
             w.start()
         previous = w.tdaysoffset(-252,today).Data[0][0].isoformat()[0:10]
         wind = w.wsd(self.Codes, "close", previous, today, "Fill=Previous;PriceAdj=F")
@@ -375,7 +376,19 @@ class Data_Source(object):
         self.Data.stock_num = len(wind.Data)
         return self.Data
 
-
+    # 27 # 股本，总股本和流通股本
+    def wind_data27(self):
+        if (self.ALL == False):
+            w.start()
+        data1 = w.wsd(self.Codes, "total_shares", "ED-2Q", today, "Fill=Previous;Period = Q;PriceAdj=F")
+        data2 = w.wsd(self.Codes, "free_float_shares", "ED-2Q", today, "Fill=Previous;Period = Q;PriceAdj=F")
+        self.clear()
+        self.Data.data.append(data1.Data)
+        self.Data.data.append(data2.Data)
+        self.Data.time = data1.Times
+        self.Data.codes = data1.Codes
+        self.Data.stock_num = len(data1.Data)
+        return self.Data
 D = Data_Source()
 print 123
 
