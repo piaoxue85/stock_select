@@ -153,7 +153,7 @@ class sub_canvas(MyMplCanvas):
         self.button2 = QPushButton(self.widget)
         self.horizontalLayout.addWidget(self.button2)
         self.lineEdit.setText(QtCore.QString('600198'))
-        three_month = QtCore.QDate.currentDate().toJulianDay() - 40
+        three_month = QtCore.QDate.currentDate().toJulianDay() - 60
         self.dateEdit.setDate(QtCore.QDate.fromJulianDay(three_month))
         self.dateEdit_2.setDate(QtCore.QDate.currentDate())
         self.label_1.setText(_translate("MainWindow", "股票代码", None))
@@ -283,22 +283,26 @@ class sub_canvas(MyMplCanvas):
         # distance = 0.3
         distance = (lim[1] - lim[0])/9
         for i in range(5,self.num):
+            alpha = 1.11
+            beta = 0.88
             high_6 = self.kbar[i][2]
             low_6 = self.kbar[i][3]
             ema_6 = self.ema[i]
             deviate_6 = max(abs(high_6 - ema_6),abs(low_6 - ema_6))
             condition1 = deviate_4 > deviate_3 > deviate_2 or deviate_4 > deviate_3 > deviate_1 or deviate_4 > deviate_2 > deviate_1
             condition2 = ema_4 > ema_3 > ema_2 or ema_2 > ema_3 > ema_4
-            condition3 = deviate_4 > deviate_5 and deviate_4 > deviate_6
+            condition3 = deviate_4 > deviate_5 * beta and deviate_4 > deviate_6
             top = high_4 - ema_4
             bottom = ema_4 - low_4
-            condition4 = (low_4 < low_5 and low_4 < low_6 and top < bottom) or (high_4 > high_5 and high_4 > high_6 and top > bottom)
+            condition4 = (low_4 < low_5 * alpha and low_4 < low_6 and top < bottom) or (high_4 > high_5 * beta and high_4 > high_6 and top > bottom)
             condition5 = top < bottom
             condition6 = top > bottom
+            condition7 = high_3 < ema_3 and high_4 < ema_4 and high_5 < ema_5 and high_6 > ema_6 * alpha
+            condition8 = low_3 > ema_3 and low_4 > ema_4 and low_5 > ema_5 and low_6 < ema_6 * beta
             matplotlib.rcParams.update({'font.size': 9})
-            if condition1 and condition2 and condition3 and condition4 and condition5:
+            if condition1 and condition2 and condition3 and condition4 and condition5 or condition7:
                 self.ax1.annotate(u'多', xy=(i, low_6), xytext=(i-0.5, low_6 - distance), arrowprops=dict(arrowstyle="-"))
-            if condition1 and condition2 and condition3 and condition4 and condition6:
+            if condition1 and condition2 and condition3 and condition4 and condition6 or condition8:
                 self.ax1.annotate(u'空', xy=(i, high_6), xytext=(i-0.5, high_6 + distance), arrowprops=dict(arrowstyle="-"))
             deviate_1 = deviate_2
             deviate_2 = deviate_3
@@ -310,8 +314,14 @@ class sub_canvas(MyMplCanvas):
             ema_3 = ema_4
             ema_4 = ema_5
             ema_5 = ema_6
+            low_1 = low_2
+            low_2 = low_3
+            low_3 = low_4
             low_4 = low_5
             low_5 = low_6
+            high_1 = high_2
+            high_2 = high_3
+            high_3 = high_4
             high_4 = high_5
             high_5 = high_6
         # self.ax1.annotate('extreme', xy=(18, 16.8), xytext=(20, 16), arrowprops=dict(arrowstyle="->"))

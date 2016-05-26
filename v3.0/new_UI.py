@@ -11,6 +11,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from data_write import *
 import main
+import future
 today_name = u'v3.0选股' + today + u'.xlsx'
 
 try:
@@ -202,6 +203,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_strategy.setObjectName(_fromUtf8("action_strategy"))
         self.action_graph = QtGui.QAction(MainWindow)
         self.action_graph.setObjectName(_fromUtf8("action_graph"))
+        self.action_future = QtGui.QAction(MainWindow)
+        self.action_future.setObjectName(_fromUtf8("action_future"))
         self.menu_1.addAction(self.action_all)
         self.menu_1.addAction(self.action_EXCEL)
         self.menu_1.addSeparator()
@@ -233,6 +236,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_5.addAction(self.action_operation)
         self.menu_5.addAction(self.action_strategy)
         self.menu_6.addAction(self.action_graph)
+        self.menu_6.addAction(self.action_future)
         self.menubar.addAction(self.menu_1.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
@@ -287,6 +291,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_operation.setText(_translate("MainWindow", "操作说明", None))
         self.action_strategy.setText(_translate("MainWindow", "策略说明", None))
         self.action_graph.setText(_translate("MainWindow", "趋势图（股票）", None))
+        self.action_future.setText(_translate("MainWindow", "趋势图（期货）", None))
 
         self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
@@ -320,6 +325,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_strategy.triggered.connect(self.slavewindow.show)
         self.action_exit.triggered.connect(self.exit)
         self.action_graph.triggered.connect(self.graph)
+        self.action_future.triggered.connect(self.future)
 
         #调整窗口打开的位置
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -425,6 +431,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def graph(self):
         self.graph = main.ApplicationWindow()
         self.graph.show()
+    def future(self):
+        self.future = future.ApplicationWindow()
+        self.future.show()
 class slaveWindow(QtGui.QWidget):
     def __init__(self, parent = None):
         super(slaveWindow, self).__init__(parent)
