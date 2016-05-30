@@ -4,7 +4,7 @@ import tkMessageBox
 from data_process import *
 from pymongo import MongoClient
 
-today_name = u'v3.0选股' + today + u'.xlsx'
+today_name = u'v3.1选股' + today + u'.xlsx'
 #居中的格式
 alignment = openpyxl.styles.Alignment(horizontal='center',vertical='center',wrap_text=True)
 def open_workbook(workbook):
@@ -84,11 +84,15 @@ def star():
     ws.cell(row=1, column=8).alignment = alignment
     ws.cell(row=1, column=7).value = u'市场波动'
     ws.cell(row=1, column=8).value = u'获得星数'
+    ws.cell(row=1, column=9).alignment = alignment
+    ws.cell(row=1, column=10).alignment = alignment
+    ws.cell(row=1, column=9).value = u'财务'
+    ws.cell(row=1, column=10).value = u'获得星数'
     all = []
     value = []
     chips = []
     market = []
-
+    finance = []
     # 公司价值
     for y in range(num_company+1,num_company+5):
         for x in range(length):
@@ -117,15 +121,22 @@ def star():
             all.append(ws.cell(row=x + 1 + 1, column=y).value)
             market.append(ws.cell(row=x + 1 + 1, column=y).value)
 
+    #财务
+    for y in range(num_finance+1, num_finance + 4):
+        for x in range(300):
+            all.append(ws.cell(row=x + 1 + 1, column=y).value)
+            finance.append(ws.cell(row=x + 1 + 1, column=y).value)
     # 总共
     myset = set(all)
     myset_value = set(value)
     myset_chips = set(chips)
     myset_market = set(market)
+    myset_finance = set(finance)
     result_all = []
     result_value = []
     result_chips = []
     result_market = []
+    result_finance = []
     for each in myset:
         result_all.append((each,all.count(each)))
     for each in myset_value:
@@ -134,10 +145,13 @@ def star():
         result_chips.append((each, chips.count(each)))
     for each in myset_market:
         result_market.append((each, market.count(each)))
+    for each in myset_finance:
+        result_finance.append((each, finance.count(each)))
     result_all_sort = sorted(result_all,key = lambda result: result[1],reverse=True)
     result_value_sort = sorted(result_value,key = lambda result: result[1],reverse=True)
     result_chips_sort = sorted(result_chips,key = lambda result: result[1],reverse=True)
     result_market_sort = sorted(result_market,key = lambda result: result[1],reverse=True)
+    result_finance_sort = sorted(result_finance,key = lambda result: result[1],reverse=True)
     for i in range(1,len(result_all)):
         ws.cell(row = i+1, column = 1).value = result_all_sort[i][0]
         ws.cell(row = i+1, column = 1).font = openpyxl.styles.Font(color='00000000')
@@ -154,15 +168,21 @@ def star():
         ws.cell(row=i + 1, column=7).value = result_market_sort[i][0]
         ws.cell(row=i + 1, column=7).font = openpyxl.styles.Font(color='00000000')
         ws.cell(row=i + 1, column=8).value = result_market_sort[i][1]
+    for i in range(1, len(result_finance)):
+        ws.cell(row=i + 1, column=9).value = result_finance_sort[i][0]
+        ws.cell(row=i + 1, column=9).font = openpyxl.styles.Font(color='00000000')
+        ws.cell(row=i + 1, column=10).value = result_finance_sort[i][1]
     wb.save(today_name)
 
 # position代表了该指标在总表的列数，方便修改
 # 公司价值数量
-num_company = 8
+num_company = 10
 # 筹码
-num_chips = 8+4
+num_chips = 10+4
 # 市场波动
-num_stock = 8+4+11
+num_stock = 10+4+11
+#财务
+num_finance = 10+4+11+13
 # 1 #营收季增率
 position1 = num_company+1
 # 2 #EPS季增率
@@ -215,6 +235,14 @@ position26 = num_stock+13
 # 27 # 股本，总股本和流通股本
 position27 = num_chips+10
 position28 = num_chips+11
+
+# 29 # 公司净值（每股净资产BPS）
+position29 = num_finance+1
+# 30 # 市盈率PE
+position30 = num_finance+2
+# 31 # 每股分红送转
+position31 = num_finance+3
+
 # 1 #营收季增率
 
 
@@ -1281,7 +1309,86 @@ def strategy27():
         ws.cell(row=i + 1 + 1, column=4).value = float_share[i][1]
         ws.cell(row=i + 1 + 1, column=4).number_format = '#,##_);[Green]-#,##'
     wb.save(today_name)
-
+# 29 # 公司净值（每股净资产BPS）
+def strategy29():
+    bps = P.process29()
+    wb = open_workbook(today_name)
+    change_sheet(wb, u'股票代码')
+    ws = open_sheet(wb, u'股票代码')
+    ws.cell(row=1, column=position29).value = u'净值（每股净资产BPS）'
+    ws.cell(row=1, column=position29).alignment = alignment
+    for i in range(len(bps)):
+        ws.cell(row=i + 1 + 1, column=position29).value = bps[i][0]
+        ws.cell(row=i + 1 + 1, column=position29).font = openpyxl.styles.Font(color='32CD32')
+    ws = open_sheet(wb, u'股本资料')
+    ws.cell(row=1, column=1).value = u'代码\n（由高到低排序）'
+    ws.cell(row=1, column=2).value = u'每股净资产(元)' + '\n' + bps[0][2][0].isoformat()[0:10]
+    ws.cell(row=1, column=1).alignment = alignment
+    ws.cell(row=1, column=2).alignment = alignment
+    format(ws, 6, 18.0)
+    ws.column_dimensions['A'].width = 18
+    for i in range(0, len(bps)):
+        ws.cell(row=i + 1 + 1, column=1).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row=i + 1 + 1, column=1).value = bps[i][0]
+        ws.cell(row=i + 1 + 1, column=2).value = bps[i][1]
+        ws.cell(row=i + 1 + 1, column=2).number_format = '#,##0.00_);[Green]-#,##0.00'
+    wb.save(today_name)
+# 30 # 市盈率PE
+def strategy30():
+    pe = P.process30()
+    if len(pe):
+        day_today = pe[0][2][0].isoformat()[0:10]
+    else:
+        day_today = str(' ')
+    wb = open_workbook(today_name)
+    change_sheet(wb, u'股票代码')
+    ws = open_sheet(wb, u'股票代码')
+    ws.cell(row=1, column=position30).value = u'市盈率（PE）'
+    ws.cell(row=1, column=position30).alignment = alignment
+    for i in range(len(pe)):
+        ws.cell(row=i + 1 + 1, column=position30).value = pe[i][0]
+        ws.cell(row=i + 1 + 1, column=position30).font = openpyxl.styles.Font(color='32CD32')
+    ws = open_sheet(wb, u'市盈率')
+    ws.cell(row=1, column=1).value = u'代码\n（由高到低排序）'
+    ws.cell(row=1, column=2).value = u'市盈率（倍）' + '\n' + day_today
+    ws.cell(row=1, column=1).alignment = alignment
+    ws.cell(row=1, column=2).alignment = alignment
+    format(ws, 6, 18.0)
+    ws.column_dimensions['A'].width = 18
+    for i in range(0, len(pe)):
+        ws.cell(row=i + 1 + 1, column=1).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row=i + 1 + 1, column=1).value = pe[i][0]
+        ws.cell(row=i + 1 + 1, column=2).value = pe[i][1]
+        ws.cell(row=i + 1 + 1, column=2).number_format = '#,##0.00_);[Green]-#,##0.00'
+    wb.save(today_name)
+# 31 # 每股分红送转
+def strategy31():
+    fenhong = P.process31()
+    if len(fenhong):
+        day_today = fenhong[0][2][0].isoformat()[0:10]
+    else:
+        day_today = str(' ')
+    wb = open_workbook(today_name)
+    change_sheet(wb, u'股票代码')
+    ws = open_sheet(wb, u'股票代码')
+    ws.cell(row=1, column=position31).value = u'每股分红送转'
+    ws.cell(row=1, column=position31).alignment = alignment
+    for i in range(len(fenhong)):
+        ws.cell(row=i + 1 + 1, column=position31).value = fenhong[i][0]
+        ws.cell(row=i + 1 + 1, column=position31).font = openpyxl.styles.Font(color='32CD32')
+    ws = open_sheet(wb, u'分红转送')
+    ws.cell(row=1, column=1).value = u'代码\n（由高到低排序）'
+    ws.cell(row=1, column=2).value = u'每股分红送转(元)' + '\n' + day_today
+    ws.cell(row=1, column=1).alignment = alignment
+    ws.cell(row=1, column=2).alignment = alignment
+    format(ws, 6, 18.0)
+    ws.column_dimensions['A'].width = 18
+    for i in range(0, len(fenhong)):
+        ws.cell(row=i + 1 + 1, column=1).font = openpyxl.styles.Font(color=openpyxl.styles.colors.BLUE)
+        ws.cell(row=i + 1 + 1, column=1).value = fenhong[i][0]
+        ws.cell(row=i + 1 + 1, column=2).value = fenhong[i][1]
+        ws.cell(row=i + 1 + 1, column=2).number_format = '#,##0.00_);[Green]-#,##0.00'
+    wb.save(today_name)
 #执行所有策略
 def all_strategy():
     # tkMessageBox.showinfo(title=u'开始执行', message=u'执行所有策略耗时较长，点击确定开始，请耐心等待')
@@ -1310,6 +1417,8 @@ def all_strategy():
     strategy24()
     strategy25()
     strategy27()
+    strategy29()
+    strategy30()
+    strategy31()
     star()
     # tkMessageBox.showinfo(title=u'写入成功', message=u'所有策略已经成功，请点击打开进行浏览')
-

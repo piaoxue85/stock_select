@@ -11,7 +11,8 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from data_write import *
 import main
-today_name = u'v3.0选股' + today + u'.xlsx'
+import future
+today_name = u'v3.1选股' + today + u'.xlsx'
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -85,17 +86,17 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.gridLayout_0.addLayout(self.gridLayout_1, 0, 0, 1, 1)
         self.gridLayout_9 = QtGui.QGridLayout()
         self.gridLayout_9.setObjectName(_fromUtf8("gridLayout_9"))
-        self.commandLinkButton = QtGui.QCommandLinkButton(self.centralwidget)
+        # self.commandLinkButton = QtGui.QCommandLinkButton(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Segoe UI"))
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
-        self.commandLinkButton.setFont(font)
-        self.commandLinkButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.commandLinkButton.setAutoDefault(False)
-        self.commandLinkButton.setObjectName(_fromUtf8("commandLinkButton"))
-        self.gridLayout_9.addWidget(self.commandLinkButton, 0, 0, 1, 1)
+        # self.commandLinkButton.setFont(font)
+        # self.commandLinkButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.commandLinkButton.setAutoDefault(False)
+        # self.commandLinkButton.setObjectName(_fromUtf8("commandLinkButton"))
+        # self.gridLayout_9.addWidget(self.commandLinkButton, 0, 0, 1, 1)
         self.gridLayout_0.addLayout(self.gridLayout_9, 2, 2, 1, 1)
         self.gridLayout_0.setColumnMinimumWidth(0, 225)
         self.gridLayout_0.setColumnMinimumWidth(1, 500)
@@ -138,6 +139,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_5.setObjectName(_fromUtf8("menu_5"))
         self.menu_6 = QtGui.QMenu(self.menubar)
         self.menu_6.setObjectName(_fromUtf8("menu_6"))
+        self.menu_7 = QtGui.QMenu(self.menubar)
+        self.menu_7.setObjectName(_fromUtf8("menu_7"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -202,6 +205,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_strategy.setObjectName(_fromUtf8("action_strategy"))
         self.action_graph = QtGui.QAction(MainWindow)
         self.action_graph.setObjectName(_fromUtf8("action_graph"))
+        self.action_future = QtGui.QAction(MainWindow)
+        self.action_future.setObjectName(_fromUtf8("action_future"))
+        self.action_finance = QtGui.QAction(MainWindow)
+        self.action_finance.setObjectName(_fromUtf8("action_finance"))
         self.menu_1.addAction(self.action_all)
         self.menu_1.addAction(self.action_EXCEL)
         self.menu_1.addSeparator()
@@ -233,12 +240,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_5.addAction(self.action_operation)
         self.menu_5.addAction(self.action_strategy)
         self.menu_6.addAction(self.action_graph)
+        self.menu_6.addAction(self.action_future)
+        self.menu_7.addAction(self.action_finance)
         self.menubar.addAction(self.menu_1.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
         self.menubar.addAction(self.menu_4.menuAction())
+        self.menubar.addAction(self.menu_7.menuAction())
         self.menubar.addAction(self.menu_5.menuAction())
         self.menubar.addAction(self.menu_6.menuAction())
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -248,15 +259,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #     QtGui.QMessageBox.about( self, u'写入成功', u'营收季增率提高策略已经成功，请点击打开进行浏览' )
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.0", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.1", None))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":image/title.png\"/></p></body></html>", None))
-        self.commandLinkButton.setText(_translate("MainWindow", "打开股票池", None))
+        # self.commandLinkButton.setText(_translate("MainWindow", "打开股票池", None))
         self.menu_1.setTitle(_translate("MainWindow", "文件", None))
         self.menu_2.setTitle(_translate("MainWindow", "公司价值", None))
         self.menu_3.setTitle(_translate("MainWindow", "筹码分布", None))
         self.menu_4.setTitle(_translate("MainWindow", "市场波动", None))
         self.menu_5.setTitle(_translate("MainWindow", "帮助说明", None))
         self.menu_6.setTitle(_translate("MainWindow", "趋势图", None))
+        self.menu_7.setTitle(_translate("MainWindow", "财务", None))
         self.action_all.setText(_translate("MainWindow", "执行所有策略", None))
         self.action_EXCEL.setText(_translate("MainWindow", "打开EXCEL", None))
         self.action_exit.setText(_translate("MainWindow", "退出", None))
@@ -287,8 +299,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_operation.setText(_translate("MainWindow", "操作说明", None))
         self.action_strategy.setText(_translate("MainWindow", "策略说明", None))
         self.action_graph.setText(_translate("MainWindow", "趋势图（股票）", None))
+        self.action_future.setText(_translate("MainWindow", "趋势图（期货）", None))
+        self.action_finance.setText(_translate("MainWindow", "财务", None))
 
-        self.commandLinkButton.clicked.connect(self.execute)
+        # self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
         self.action_all.triggered.connect(self.strategy_all)
         self.action_1.triggered.connect(self.strategy1)
@@ -320,6 +334,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_strategy.triggered.connect(self.slavewindow.show)
         self.action_exit.triggered.connect(self.exit)
         self.action_graph.triggered.connect(self.graph)
+        self.action_future.triggered.connect(self.future)
+        self.action_finance.triggered.connect(self.finance)
 
         #调整窗口打开的位置
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -401,7 +417,11 @@ class Ui_MainWindow(QtGui.QMainWindow):
         QtGui.QMessageBox.about( self, u'开始执行', u'执行所有策略耗时较长，点击确定开始，请耐心等待' )
         all_strategy()
         QtGui.QMessageBox.about( self, u'写入成功', u'所有策略已经成功，请点击打开进行浏览' )
-
+    def finance(self):
+        strategy29()
+        strategy30()
+        strategy31()
+        QtGui.QMessageBox.about(self, u'写入成功', u'财务生成已经成功，请点击打开进行浏览')
     def indro(self):
         f = open(u"策略说明.txt","r")
         text = f.read()
@@ -425,6 +445,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def graph(self):
         self.graph = main.ApplicationWindow()
         self.graph.show()
+    def future(self):
+        self.future = future.ApplicationWindow()
+        self.future.show()
 class slaveWindow(QtGui.QWidget):
     def __init__(self, parent = None):
         super(slaveWindow, self).__init__(parent)

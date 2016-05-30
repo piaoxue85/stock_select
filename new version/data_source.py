@@ -3,8 +3,8 @@
 from WindPy import *
 import math
 #今天日期，格式为YYYY-MM-DD
-# today = date.today().isoformat()
-today = '2016-05-19'
+today = date.today().isoformat()
+# today = '2016-05-23'
 # 提供原数据的类
 
 
@@ -389,6 +389,41 @@ class Data_Source(object):
         self.Data.codes = data1.Codes
         self.Data.stock_num = len(data1.Data)
         return self.Data
+
+    # 29 # 公司净值（每股净资产BPS）
+    def wind_data29(self):
+        if self.ALL is False:
+            w.start()
+        wind = w.wsd(self.Codes, "bps", "ED-1Q", today, "rptType=1;Period=Q;PriceAdj=F")
+        self.clear()
+        self.Data.data = wind.Data
+        self.Data.time = wind.Times
+        self.Data.codes = wind.Codes
+        self.Data.stock_num = len(wind.Data)
+        return self.Data
+    # 30 # 市盈率PE
+    def wind_data30(self):
+        if self.ALL is False:
+            w.start()
+        wind = w.wsd(self.Codes, "pe", "ED-1Q", today, "ruleType=2;Period=Q;Fill=Previous;PriceAdj=F")
+        self.clear()
+        self.Data.data = wind.Data
+        self.Data.time = wind.Times
+        self.Data.codes = wind.Codes
+        self.Data.stock_num = len(wind.Data)
+        return self.Data
+    # 31 # 每股分红送转
+    def wind_data31(self):
+        if self.ALL is False:
+            w.start()
+        wind = w.wsd(self.Codes, "div_cashandstock", "ED-2Q", today, "rptType=1;Period=Q;PriceAdj=F")
+        self.clear()
+        self.Data.data = wind.Data
+        self.Data.time = wind.Times
+        self.Data.codes = wind.Codes
+        self.Data.stock_num = len(wind.Data)
+        return self.Data
+
 D = Data_Source()
 print 123
 

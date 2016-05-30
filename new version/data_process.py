@@ -56,6 +56,12 @@ class Process(object):
         # 25#袁氏选股
         self.yuan1 = []
         self.yuan2 = []
+        # 29 # 公司净值（每股净资产BPS）
+        self.bps = []
+        # 30 # 市盈率PE
+        self.pe = []
+        # 31 # 每股分红送转
+        self.fenhong = []
     #执行全部策略
     def exec_all(self):
         D.get_all()
@@ -977,4 +983,67 @@ class Process(object):
         x = sorted(self.trader, key=lambda trader: trader[1], reverse=True)
         y = sorted(self.fund, key=lambda fund: fund[1], reverse=True)
         return x,y
+    # 29 # 公司净值（每股净资产BPS）
+    def process29(self):
+        Data = D.wind_data29()
+        data = Data.data
+        this_time = Data.time
+        for i in range(Data.stock_num):
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            # 判错代码
+            errcode = 0
+            Q = data[i][0]
+            if (Q == None):
+                print code + u"没有上季数据"
+                errcode = 1
+            elif (math.isnan(Q)):
+                print code + u"没有上季数据"
+                errcode = 1
+            if (errcode == 0):
+                self.bps.append((code, Q, this_time))
+        x = sorted(self.bps, key=lambda trader: trader[1], reverse=True)
+        return x
+    # 30 # 市盈率PE
+    def process30(self):
+        Data = D.wind_data30()
+        data = Data.data
+        this_time = Data.time
+        for i in range(Data.stock_num):
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            # 判错代码
+            errcode = 0
+            Q = data[i][0]
+            if (Q == None):
+                print code + u"没有上季数据"
+                errcode = 1
+            elif (math.isnan(Q)):
+                print code + u"没有上季数据"
+                errcode = 1
+            if (errcode == 0):
+                self.pe.append((code, Q, this_time))
+        x = sorted(self.pe, key=lambda trader: trader[1], reverse=True)
+        return x
+    # 31 # 每股分红送转
+    def process31(self):
+        Data = D.wind_data31()
+        data = Data.data
+        this_time = Data.time
+        for i in range(Data.stock_num):
+            # 本循环中股票代码
+            code = str(Data.codes[i])
+            # 判错代码
+            errcode = 0
+            Q = data[i][0]
+            if (Q == None):
+                print code + u"没有上季数据"
+                errcode = 1
+            elif (math.isnan(Q)):
+                print code + u"没有上季数据"
+                errcode = 1
+            if (errcode == 0):
+                self.fenhong.append((code, Q, this_time))
+        x = sorted(self.fenhong, key=lambda trader: trader[1], reverse=True)
+        return x
 P = Process()

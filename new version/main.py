@@ -153,7 +153,7 @@ class sub_canvas(MyMplCanvas):
         self.button2 = QPushButton(self.widget)
         self.horizontalLayout.addWidget(self.button2)
         self.lineEdit.setText(QtCore.QString('600198'))
-        three_month = QtCore.QDate.currentDate().toJulianDay() - 40
+        three_month = QtCore.QDate.currentDate().toJulianDay() - 60
         self.dateEdit.setDate(QtCore.QDate.fromJulianDay(three_month))
         self.dateEdit_2.setDate(QtCore.QDate.currentDate())
         self.label_1.setText(_translate("MainWindow", "股票代码", None))
