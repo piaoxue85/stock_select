@@ -15,8 +15,8 @@ def ini():
 
 
 def star_db():
-    today_name = u'v3.1选股2016-05-30.xlsx'
-    today = u'2016-05-30'
+    today_name = u'v3.1选股2016-01-08.xlsx'
+    today = u'2016-01-08'
     codes = D.all_code().split(",")
     length = len(codes)
     wb = open_workbook(today_name)
@@ -42,6 +42,11 @@ def star_db():
     # 市场波动
     for y in range(num_stock + 1, num_stock + 14):
         for x in range(length):
+            all.append(ws.cell(row=x + 1 + 1, column=y).value)
+
+    # 财务
+    for y in range(num_finance + 1, num_finance + 4):
+        for x in range(300):
             all.append(ws.cell(row=x + 1 + 1, column=y).value)
 
     col = ini()

@@ -123,7 +123,7 @@ class Process(object):
             #上三季数据
             pre_3Q = Data.data[i][0]
             this_data.append(pre_3Q)
-            if(math.isnan(pre_3Q) or pre_3Q == 0):
+            if(math.isnan(pre_3Q) or pre_3Q == 0 or pre_3Q == -1):
                 print code + "没有上三季数据"
                 errcode = 1
             #上两季数据
