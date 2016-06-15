@@ -299,18 +299,21 @@ class sub_canvas(MyMplCanvas):
             condition6 = top > bottom
             condition7 = high_3 < ema_3 and high_4 < ema_4 and high_5 < ema_5 and high_6 > ema_6 * alpha
             condition8 = low_3 > ema_3 and low_4 > ema_4 and low_5 > ema_5 and low_6 < ema_6 * beta
-            condition9 = (ema_3 > ema_4 or ema_3 > ema_5) and ema_6 > ((ema_3 + ema_4 + ema_5)/3) and ema_6 > ema_5
-            condition10 = (ema_3 < ema_4 or ema_3 < ema_5) and ema_6 < ((ema_3 + ema_4 + ema_5)/3) and ema_6 < ema_5
+            max_ema = max(ema_3,ema_4,ema_5)
+            min_ema = min(ema_3,ema_4,ema_5)
+            condition9 = (ema_3 > ema_4 > ema_5) and ema_6 > ema_5
+            condition10 = (ema_3 < ema_4 < ema_5) and ema_6 < ema_5
+            condition11 = max_ema < (min_ema * 1.1)
             matplotlib.rcParams.update({'font.size': 9})
             if condition1 and condition2 and condition3 and condition4 and condition5 or condition7:
                 self.ax1.annotate(u'多', xy=(i, low_6), xytext=(i-0.5, low_6 - distance), arrowprops=dict(arrowstyle="-"))
             if condition1 and condition2 and condition3 and condition4 and condition6 or condition8:
                 self.ax1.annotate(u'空', xy=(i, high_6), xytext=(i-0.5, high_6 + distance), arrowprops=dict(arrowstyle="-"))
-            if condition9:
-                self.ax1.annotate(u'B', xy=(i, low_6), xytext=(i - 0.5, low_6 - distance),
+            if condition9 and condition11:
+                self.ax1.annotate(u'B', xy=(i, low_6), xytext=(i - 0.5, low_6 - distance * 3),
                                   arrowprops=dict(arrowstyle="-"))
-            if condition10:
-                self.ax1.annotate(u'S', xy=(i, high_6), xytext=(i - 0.5, high_6 + distance),
+            if condition10 and condition11:
+                self.ax1.annotate(u'S', xy=(i, high_6), xytext=(i - 0.5, high_6 + distance * 3),
                                   arrowprops=dict(arrowstyle="-"))
             deviate_1 = deviate_2
             deviate_2 = deviate_3

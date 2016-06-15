@@ -85,15 +85,18 @@ def source(code = '601928',start = '2016-03-25', end = '2016-05-04'):
     ema = []
     kbar = []
     str_date = []
+    volume = []
     WindPy.w.start()
     data = WindPy.w.wsd(code, "open,high,low,close,EXPMA,sec_name", start, end,"Fill=Previous;EXPMA_N=10")
+    data_volume = WindPy.w.wsd(code, "volume", start, end, "Fill=Previous")
     num  = len(data.Times)
     name = data.Data[5][0]
     for i in range(num):
         kbar.append((i,data.Data[0][i], data.Data[1][i], data.Data[2][i], data.Data[3][i]))
         ema.append(data.Data[4][i])
         str_date.append(data.Times[i].isoformat()[5:10])
-    return num,kbar,str_date,ema,name
+        volume.append(data_volume.Data[0][i])
+    return num,kbar,str_date,ema,name,volume
 
 # 将matplotlib的一个组件放进去
 
@@ -314,14 +317,14 @@ class sub_canvas(MyMplCanvas):
         start = datetime.date(int(start.split("/")[0]), int(start.split("/")[1]), int(start.split("/")[2])).isoformat()
         end = datetime.date(int(end.split("/")[0]), int(end.split("/")[1]), int(end.split("/")[2])).isoformat()
 
-        self.num, self.kbar, self.str_date, self.ema, self.name= source(code, start, end)
+        self.num, self.kbar, self.str_date, self.ema, self.name, self.volume= source(code, start, end)
         self.star_date, self.star_value = star(col, code, start, end)
         self.update_figure()
     def update_figure(self):
 
         self.fig.clf()
         self.ax1 = self.fig.add_axes([0.22, 0.1, 0.7, 0.7])
-        # self.ax2 = self.ax1.twinx()  # 创建第二个坐标轴,为同图
+        self.ax2 = self.ax1.twinx()  # 创建第二个坐标轴,为同图
         # 子图一
         WindPy.w.start()
         self.ax1.set_xticks(range(self.num))
@@ -334,6 +337,7 @@ class sub_canvas(MyMplCanvas):
 
         # self.ax2.bar(range(len(self.star_date)), self.star_value, picker=True, color='#FFFF00', width = 0.5,edgecolor = 'black')
         self.ax1.plot(range(self.num),self.ema,linewidth = 0.5,color = "blue")
+        self.ax2.bar(range(self.num),self.volume)
         from matplotlib.font_manager import FontProperties
         font = FontProperties(size=14)  # 设置字体
         self.ax1.set_title(self.name)
@@ -407,9 +411,9 @@ class sub_canvas(MyMplCanvas):
         low_5 = self.kbar[3][3]
         ema_5 = self.ema[3]
         deviate_5 = max(abs(high_5 - ema_5), abs(low_5 - ema_5))
-        lim = self.ax1.get_ylim()
+        lim1 = self.ax1.get_ylim()
         # distance = 0.3
-        distance = (lim[1] - lim[0])/9
+        distance = (lim1[1] - lim1[0])/9
         for i in range(5,self.num):
             alpha = 1.10
             beta = 0.90
@@ -459,6 +463,8 @@ class sub_canvas(MyMplCanvas):
         # self.ax2.hold(False)
         lim = self.ax1.get_ylim()
         self.ax1.set_ylim(lim[0] * 0.95, lim[1])
+        lim2 = self.ax2.get_ylim()
+        self.ax2.set_ylim(lim2[0],lim2[1]*8)
         for tick in self.ax1.xaxis.get_major_ticks():
             tick.label1.set_fontsize(8)
             tick.label1.set_rotation(75)
