@@ -291,6 +291,12 @@ class sub_canvas(MyMplCanvas):
         deviate_5 = max(abs(high_5 - ema_5), abs(low_5 - ema_5))
         lim = self.ax1.get_ylim()
         distance = (lim[1] - lim[0])/9
+        mark_1 = {'Buy':False,'Sell':False}
+        mark_2 = {'Buy':False,'Sell':False}
+        mark_3 = {'Buy':False,'Sell':False}
+        mark_4 = {'Buy':False,'Sell':False}
+        mark_5 = {'Buy':False,'Sell':False}
+        mark_6 = {'Buy':False,'Sell':False}
         for i in range(5,self.num):
             alpha = 1.11
             beta = 0.88
@@ -313,21 +319,26 @@ class sub_canvas(MyMplCanvas):
             condition9 = (ema_3 > ema_4 > ema_5) and ema_6 > ema_5
             condition10 = (ema_3 < ema_4 < ema_5) and ema_6 < ema_5
             condition11 = max_ema < (min_ema * 1.1)
+            condition12 = (mark_5['Buy'] == False)
+            condition13 = (mark_5['Sell'] == False)
             matplotlib.rcParams.update({'font.size': 9})
             if self.control["extreme"]:
-                if condition1 and condition2 and condition3 and condition4 and condition5 or condition7:
+                if condition1 and condition2 and condition3 and condition4 and condition5 and condition12 or condition7 :
                     # self.ax1.annotate(u'多', xy=(i, low_6), xytext=(i-0.5, low_6 - distance), arrowprops=dict(arrowstyle="-"))
-                    self.ax1.text(i-0.5, low_6 - distance * 2, u'多',size=9)
-                if condition1 and condition2 and condition3 and condition4 and condition6 or condition8:
+                    self.ax1.text(i-0.7, low_6 - distance * 1, u'多',size=5)
+                    mark_6['Buy'] = True
+                if condition1 and condition2 and condition3 and condition4 and condition6 and condition13 or condition8 :
                     # self.ax1.annotate(u'空', xy=(i, high_6), xytext=(i-0.5, high_6 + distance), arrowprops=dict(arrowstyle="-"))
-                    self.ax1.text(i - 0.5, high_6 + distance * 2, u'空', size=9)
+                    self.ax1.text(i-0.7, high_6 + distance * 1, u'空', size=5)
+                    mark_6['Sell'] = True
             if self.control["slope"]:
                 if condition9 and condition11:
                     # self.ax1.annotate(u'B', xy=(i - 0.5, low_6 - distance * 3), xytext=(i - 0.5, low_6 - distance * 3),arrowprops=dict(arrowstyle="-"))
-                    self.ax1.text(i - 0.5, low_6 + distance * 6, u'B', size=5)
+                    self.ax1.text(i - 0.5, low_6 - distance * 1.8, u'B', size=8)
                 if condition10 and condition11:
                     # self.ax1.annotate(u'S', xy=(i - 0.5, high_6 + distance * 3), xytext=(i - 0.5, high_6 + distance * 3),arrowprops=dict(arrowstyle="-"))
-                    self.ax1.text(i - 0.5, high_6 + distance * 6, u'S', size=5)
+                    self.ax1.text(i - 0.5, high_6 + distance * 1.8, u'S', size=8)
+
             deviate_1 = deviate_2
             deviate_2 = deviate_3
             deviate_3 = deviate_4
@@ -348,6 +359,12 @@ class sub_canvas(MyMplCanvas):
             high_3 = high_4
             high_4 = high_5
             high_5 = high_6
+            mark_1 = mark_2
+            mark_2 = mark_3
+            mark_3 = mark_4
+            mark_4 = mark_5
+            mark_5 = mark_6
+            mark_6 = {'Buy':False,'Sell':False}
         # self.ax1.annotate('extreme', xy=(18, 16.8), xytext=(20, 16), arrowprops=dict(arrowstyle="->"))
         self.ax2.set_ylim(0, 80)
         candlestick_ohlc(self.ax1, self.kbar, width=0.5, colorup='r', colordown='g')
