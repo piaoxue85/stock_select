@@ -349,7 +349,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         QtGui.QMessageBox.about( self, u'写入成功', u'EPS季增率提高策略已经成功，请点击打开进行浏览' )
     def strategy3(self):
         strategy3()
-        QtGui.QMessageBox.about( self, u'写入成功', u'毛利率季增率提高策略已经成功，请点击打开进行浏览' )
+        QtGui.QMessageBox.about( self, u'写入成功', u'毛利率季增率提高策'
+                                                u'略已经成功，请点击打开进行浏览' )
     def strategy4(self):
         strategy4()
         QtGui.QMessageBox.about( self, u'写入成功', u'ROE季增率提高策略已经成功，请点击打开进行浏览' )
