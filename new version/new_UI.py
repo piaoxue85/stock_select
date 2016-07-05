@@ -12,7 +12,7 @@ from PyQt4 import QtCore
 from data_write import *
 import main
 import future
-today_name = u'v3.1选股' + today + u'.xlsx'
+today_name = u'v3.2选股' + today + u'.xlsx'
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -101,7 +101,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.gridLayout_0.setColumnMinimumWidth(0, 225)
         self.gridLayout_0.setColumnMinimumWidth(1, 500)
         self.gridLayout_0.setColumnMinimumWidth(2, 225)
-        self.gridLayout_0.setRowMinimumHeight(0, 100)
         self.gridLayout_0.setRowMinimumHeight(1, 200)
         self.gridLayout_0.setRowMinimumHeight(2, 100)
         self.gridLayout_0.setColumnStretch(0, 2)
@@ -147,6 +146,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
         self.action_all = QtGui.QAction(MainWindow)
         self.action_all.setObjectName(_fromUtf8("action_all"))
+        self.action_all_future = QtGui.QAction(MainWindow)
+        self.action_all_future.setObjectName(_fromUtf8("action_all_future"))
         self.action_EXCEL = QtGui.QAction(MainWindow)
         self.action_EXCEL.setObjectName(_fromUtf8("action_EXCEL"))
         self.action_exit = QtGui.QAction(MainWindow)
@@ -210,6 +211,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.action_finance = QtGui.QAction(MainWindow)
         self.action_finance.setObjectName(_fromUtf8("action_finance"))
         self.menu_1.addAction(self.action_all)
+        self.menu_1.addAction(self.action_all_future)
         self.menu_1.addAction(self.action_EXCEL)
         self.menu_1.addSeparator()
         self.menu_1.addAction(self.action_exit)
@@ -259,7 +261,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #     QtGui.QMessageBox.about( self, u'写入成功', u'营收季增率提高策略已经成功，请点击打开进行浏览' )
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.1", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.2", None))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":image/title.png\"/></p></body></html>", None))
         # self.commandLinkButton.setText(_translate("MainWindow", "打开股票池", None))
         self.menu_1.setTitle(_translate("MainWindow", "文件", None))
@@ -269,7 +271,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menu_5.setTitle(_translate("MainWindow", "帮助说明", None))
         self.menu_6.setTitle(_translate("MainWindow", "趋势图", None))
         self.menu_7.setTitle(_translate("MainWindow", "财务", None))
-        self.action_all.setText(_translate("MainWindow", "执行所有策略", None))
+        self.action_all.setText(_translate("MainWindow", "执行所有策略（股票）", None))
+        self.action_all_future.setText(_translate("MainWindow", "执行策略（期货）", None))
         self.action_EXCEL.setText(_translate("MainWindow", "打开EXCEL", None))
         self.action_exit.setText(_translate("MainWindow", "退出", None))
         self.action_1.setText(_translate("MainWindow", "营收季增率", None))
@@ -305,6 +308,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         # self.commandLinkButton.clicked.connect(self.execute)
         self.action_EXCEL.triggered.connect(self.execute)
         self.action_all.triggered.connect(self.strategy_all)
+        self.action_all_future.triggered.connect(self.strategy_all_future)
         self.action_1.triggered.connect(self.strategy1)
         self.action_2.triggered.connect(self.strategy2)
         self.action_3.triggered.connect(self.strategy3)
@@ -349,7 +353,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         QtGui.QMessageBox.about( self, u'写入成功', u'EPS季增率提高策略已经成功，请点击打开进行浏览' )
     def strategy3(self):
         strategy3()
-        QtGui.QMessageBox.about( self, u'写入成功', u'毛利率季增率提高策略已经成功，请点击打开进行浏览' )
+        QtGui.QMessageBox.about( self, u'写入成功', u'毛利率季增率提高策'
+                                                u'略已经成功，请点击打开进行浏览' )
     def strategy4(self):
         strategy4()
         QtGui.QMessageBox.about( self, u'写入成功', u'ROE季增率提高策略已经成功，请点击打开进行浏览' )
@@ -417,6 +422,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         QtGui.QMessageBox.about( self, u'开始执行', u'执行所有策略耗时较长，点击确定开始，请耐心等待' )
         all_strategy()
         QtGui.QMessageBox.about( self, u'写入成功', u'所有策略已经成功，请点击打开进行浏览' )
+    def strategy_all_future(self):
+        QtGui.QMessageBox.about(self, u'开始执行', u'执行期货策略耗时较长，点击确定开始，请耐心等待')
+        all_strategy_future()
+        QtGui.QMessageBox.about(self, u'写入成功', u'期货市场策略已经成功，请点击打开进行浏览')
     def finance(self):
         strategy29()
         strategy30()
