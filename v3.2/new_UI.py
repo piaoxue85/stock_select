@@ -261,7 +261,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #     QtGui.QMessageBox.about( self, u'写入成功', u'营收季增率提高策略已经成功，请点击打开进行浏览' )
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.1", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "选股V3.2", None))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":image/title.png\"/></p></body></html>", None))
         # self.commandLinkButton.setText(_translate("MainWindow", "打开股票池", None))
         self.menu_1.setTitle(_translate("MainWindow", "文件", None))

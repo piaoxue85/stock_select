@@ -390,7 +390,7 @@ class sub_canvas(MyMplCanvas):
         # self.ax1.hold(False)
         # self.ax2.hold(False)
         lim = self.ax1.get_ylim()
-        self.ax1.set_ylim(lim[0] * 0.8, lim[1]*1.1)
+        self.ax1.set_ylim(lim[0] * 0.9, lim[1]*0.98)
         for tick in self.ax1.xaxis.get_major_ticks():
             tick.label1.set_fontsize(8)
             tick.label1.set_rotation(75)
