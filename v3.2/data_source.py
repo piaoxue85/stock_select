@@ -3,8 +3,8 @@
 from WindPy import *
 import math
 #今天日期，格式为YYYY-MM-DD
-#today = date.today().isoformat()
-today = '2016-07-05'
+# today = date.today().isoformat()
+today = '2016-08-02'
 # 提供原数据的类
 
 
