@@ -15,8 +15,8 @@ def ini():
 
 
 def star_db():
-    today_name = u'v3.2选股2016-08-03.xlsx'
-    today = u'2016-08-03'
+    today_name = u'v3.2选股2016-08-04.xlsx'
+    today = u'2016-08-04'
     codes = D.Codes.split(",")
     length = len(codes)
     wb = open_workbook(today_name)
