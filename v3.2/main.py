@@ -295,9 +295,9 @@ class sub_canvas(MyMplCanvas):
         low_4 = self.kbar[3][3]
         ema_4 = self.ema[3]
         deviate_4 = max(abs(high_4 - ema_4), abs(low_4 - ema_4))
-        high_5 = self.kbar[3][2]
-        low_5 = self.kbar[3][3]
-        ema_5 = self.ema[3]
+        high_5 = self.kbar[4][2]
+        low_5 = self.kbar[4][3]
+        ema_5 = self.ema[4]
         deviate_5 = max(abs(high_5 - ema_5), abs(low_5 - ema_5))
         lim = self.ax1.get_ylim()
         distance = (lim[1] - lim[0])/9

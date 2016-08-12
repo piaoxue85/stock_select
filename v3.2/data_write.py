@@ -1947,7 +1947,7 @@ def all_strategy():
     strategy15()
     strategy16()
     strategy17()
-    strategy18()
+    # strategy18()
     strategy19()
     strategy202122()
     strategy23()
